@@ -9,7 +9,7 @@ import picasso.parser.language.ExpressionTreeNode;
  * @author Sara Sprenkle
  * 
  */
-public class Plus extends BinaryFunction {
+public class Plus extends BinaryOperator {
 
 	/**
 	 * Create a plus expression tree that takes as a parameters the given expression // FIXME: write correct comments

@@ -9,7 +9,7 @@ import picasso.parser.language.ExpressionTreeNode;
  * @author Asya Yurkovskaya
  *
  */
-public abstract class BinaryFunction extends ExpressionTreeNode {
+public abstract class BinaryOperator extends ExpressionTreeNode {
 
 	ExpressionTreeNode left;
 	ExpressionTreeNode right;
@@ -18,7 +18,7 @@ public abstract class BinaryFunction extends ExpressionTreeNode {
 	 * 
 	 * @param param
 	 */
-	public BinaryFunction(ExpressionTreeNode left, ExpressionTreeNode right) {
+	public BinaryOperator(ExpressionTreeNode left, ExpressionTreeNode right) {
 		this.left = left;
         this.right = right;
 	}
@@ -41,7 +41,7 @@ public abstract class BinaryFunction extends ExpressionTreeNode {
 			return true;
 		}
 
-		if (!(o instanceof BinaryFunction)) {
+		if (!(o instanceof BinaryOperator)) {
 			return false;
 		}
 
@@ -51,7 +51,7 @@ public abstract class BinaryFunction extends ExpressionTreeNode {
 			return false;
 		}
 
-		BinaryFunction uf = (BinaryFunction) o;
+		BinaryOperator uf = (BinaryOperator) o;
 
 		// check if their parameters are equal
 		if (!this.left.equals(uf.left) | !this.right.equals(uf.right)) {
