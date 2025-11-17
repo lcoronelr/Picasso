@@ -18,7 +18,7 @@ public abstract class BinaryFunction extends ExpressionTreeNode {
 	 * 
 	 * @param param
 	 */
-	public BinaryFunction(ExpressionTreeNode left, right) {
+	public BinaryFunction(ExpressionTreeNode left, ExpressionTreeNode right) {
 		this.left = left;
         this.right = right;
 	}

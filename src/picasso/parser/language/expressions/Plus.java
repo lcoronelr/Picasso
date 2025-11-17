@@ -9,15 +9,15 @@ import picasso.parser.language.ExpressionTreeNode;
  * @author Sara Sprenkle
  * 
  */
-public class Floor extends UnaryFunction {
+public class Plus extends BinaryFunction {
 
 	/**
-	 * Create a floor expression tree that takes as a parameter the given expression
+	 * Create a plus expression tree that takes as a parameters the given expression // FIXME: write correct comments
 	 * 
 	 * @param param the expression to floor
 	 */
-	public Floor(ExpressionTreeNode param) {
-		super(param);
+	public Plus(ExpressionTreeNode left, ExpressionTreeNode right) {
+		super(left, right);
 	}
 
 	/**
@@ -28,10 +28,11 @@ public class Floor extends UnaryFunction {
 	 */
 	@Override
 	public RGBColor evaluate(double x, double y) {
-		RGBColor result = param.evaluate(x, y);
-		double red = Math.floor(result.getRed());
-		double green = Math.floor(result.getGreen());
-		double blue = Math.floor(result.getBlue());
+		RGBColor left_result = left.evaluate(x, y);
+		RGBColor right_result = right.evaluate(x, y);
+		double red = left_result.getRed() + right_result.getRed();
+		double green = left_result.getGreen() + right_result.getGreen();
+		double blue = left_result.getBlue() + right_result.getBlue();
 
 		return new RGBColor(red, green, blue);
 	}
