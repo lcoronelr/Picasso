@@ -52,8 +52,6 @@ public class Frame extends JFrame {
 		getContentPane().add(canvas, BorderLayout.CENTER);
 		getContentPane().add(topPart, BorderLayout.NORTH);
 		pack();
-		setTitle("Picasso - gamechangers - Luis Coronel, Menilik Deneke, Therese Elvira Mombou Gatsing, Abhishek Pradhan, Asya Yurkovskaya");
-
 		
 	}
 }
