@@ -19,7 +19,6 @@ public class Floor extends UnaryFunction {
 	public Floor(ExpressionTreeNode param) {
 		super(param);
 	}
-
 	/**
 	 * Evaluates this expression at the given x,y point by evaluating the floor of
 	 * the function's parameter.
