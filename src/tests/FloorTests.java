@@ -84,7 +84,7 @@ class FloorTests {
 		assertEquals(new Floor(new X()), e);
 
 		e = parser.makeExpression("floor( x + y )");
-		assertEquals(new Floor(new Addition(new X(), new Y())), e);
+		assertEquals(new Floor(new Plus(new X(), new Y())), e);
 	}
 
 	@Test

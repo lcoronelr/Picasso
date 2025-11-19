@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import picasso.parser.ExpressionTreeGenerator;
 import picasso.parser.Tokenizer;
 import picasso.parser.language.ExpressionTreeNode;
-// import picasso.parser.language.expressions.Addition;
+import picasso.parser.language.expressions.Plus;
 import picasso.parser.language.expressions.RGBColor;
 import picasso.parser.language.expressions.Atan;
 import picasso.parser.language.expressions.Floor;
@@ -103,7 +103,7 @@ public class AtanTests {
 
 		
 		// e = parser.makeExpression("atan( x + y )");
-		// assertEquals(new Atangent(new Addition(new X(), new Y())), e);
+		// assertEquals(new Atangent(new Plus(new X(), new Y())), e);
 	}
 
 	@Test
