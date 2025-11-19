@@ -109,7 +109,7 @@ public class AtanTests {
 	@Test
 	public void testToString() {
 		ExpressionTreeNode atan = new Atan(new Y());
-		assertEquals("Atangent(y)", atan.toString());
+		assertEquals("Atan(y)", atan.toString());
 	}
 
 	@Test
