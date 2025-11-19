@@ -19,7 +19,6 @@ public class Plus extends BinaryOperator {
 	public Plus(ExpressionTreeNode left, ExpressionTreeNode right) {
 		super(left, right);
 	}
-
 	/**
 	 * Evaluates this expression at the given x,y point by evaluating the floor of
 	 * the function's parameter.
