@@ -9,13 +9,13 @@ import picasso.parser.language.ExpressionTreeNode;
  * @author Therese Elvira Mombou Gatsing
  * 
  */
-public class Tangent extends UnaryFunction {
+public class Tan extends UnaryFunction {
 	
 	
 	/**
 	 * @param param
 	 */
-	public Tangent(ExpressionTreeNode param) {
+	public Tan(ExpressionTreeNode param) {
 		super(param);
 	}
 	

@@ -53,7 +53,7 @@ public class Canvas extends JPanel {
 	public void refresh() {
 		if (!myPixmap.getSize().equals(getSize())) {
 			setSize(myPixmap.getSize());
-			myContainer.setTitle(myPixmap.getName());
+			myContainer.setTitle("Luis Coronel, Menilik Deneke, Therese Elvira Mombou Gatsing, Abhishek Pradhan, Asya Yurkovskaya - " + myPixmap.getName());
 			myContainer.pack();
 		}
 		repaint();

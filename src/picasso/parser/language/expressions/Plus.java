@@ -12,14 +12,15 @@ import picasso.parser.language.ExpressionTreeNode;
 public class Plus extends BinaryOperator {
 
 	/**
-	 * Create a plus expression tree that takes as a parameters the given expression // FIXME: write correct comments
+	 * Create a plus expression tree that takes as parameters two given expressions
 	 * 
-	 * @param param the expression to floor
+	 * @param left the left expression
+	 * @param right the right expression
 	 */
 	public Plus(ExpressionTreeNode left, ExpressionTreeNode right) {
 		super(left, right);
 	}
-	/**
+	/** //TODO: change the comments
 	 * Evaluates this expression at the given x,y point by evaluating the floor of
 	 * the function's parameter.
 	 * 

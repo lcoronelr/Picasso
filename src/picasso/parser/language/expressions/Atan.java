@@ -9,9 +9,9 @@ import picasso.parser.language.ExpressionTreeNode;
  * @author Therese Elvira Mombou Gatsing
  * 
  */
-public class Atangent extends UnaryFunction{
+public class Atan extends UnaryFunction{
 	
-	public Atangent(ExpressionTreeNode param) {
+	public Atan(ExpressionTreeNode param) {
 		super(param);
 	}
 

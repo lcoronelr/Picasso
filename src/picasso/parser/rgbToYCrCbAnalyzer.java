@@ -4,7 +4,7 @@ import java.util.Stack;
 
 import picasso.parser.language.ExpressionTreeNode;
 import picasso.parser.language.expressions.Floor;
-import picasso.parser.language.expressions.rgbToYCrCb;
+import picasso.parser.language.expressions.RgbToYCrCb;
 import picasso.parser.tokens.Token;
 
 /** 
@@ -13,7 +13,7 @@ import picasso.parser.tokens.Token;
  * @author Abhishek Pradhan
  *
  */
-public class rgbToYCrCbAnalyzer extends UnaryFunctionAnalyzer{
+public class RgbToYCrCbAnalyzer extends UnaryFunctionAnalyzer{
 	
 	@Override
 	
@@ -21,7 +21,7 @@ public class rgbToYCrCbAnalyzer extends UnaryFunctionAnalyzer{
 		tokens.pop();
 		ExpressionTreeNode paramETN = SemanticAnalyzer.getInstance().generateExpressionTree(
 				tokens);
-		return new rgbToYCrCb(paramETN);
+		return new RgbToYCrCb(paramETN);
 	}
 
 }

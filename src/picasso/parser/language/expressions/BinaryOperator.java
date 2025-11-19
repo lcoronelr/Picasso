@@ -3,7 +3,7 @@ package picasso.parser.language.expressions;
 import picasso.parser.language.ExpressionTreeNode;
 
 /**
- * Represents a function that takes one argument.
+ * Represents a binary operator that takes two arguments.
  * 
  * @author Robert C. Duvall
  * @author Asya Yurkovskaya

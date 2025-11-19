@@ -3,7 +3,7 @@ package picasso.parser;
 import java.util.Stack;
 
 import picasso.parser.language.ExpressionTreeNode;
-import picasso.parser.language.expressions.Tangent;
+import picasso.parser.language.expressions.Tan;
 import picasso.parser.tokens.Token;
 
 
@@ -20,7 +20,7 @@ public class TanAnalyzer extends UnaryFunctionAnalyzer {
 		tokens.pop(); 
 		ExpressionTreeNode paramETN = SemanticAnalyzer.getInstance().generateExpressionTree(
 				tokens);
-		return new Tangent(paramETN);
+		return new Tan(paramETN);
 	}
 
 }

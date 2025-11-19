@@ -10,14 +10,14 @@ import picasso.parser.language.ExpressionTreeNode;
  *//**
  */
 
-public class rgbToYCrCb extends UnaryFunction{
+public class RgbToYCrCb extends UnaryFunction{
 
 	/**
 	 * Create a floor expression tree that takes as a parameter the given expression
 	 * 
 	 * @param param the expression to rgbToYCrCb
 	 */
-	public rgbToYCrCb(ExpressionTreeNode param) {
+	public RgbToYCrCb(ExpressionTreeNode param) {
 		super(param);
 	}
 	

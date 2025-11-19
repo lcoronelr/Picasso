@@ -3,26 +3,24 @@ package picasso.parser;
 import java.util.Stack;
 
 import picasso.parser.language.ExpressionTreeNode;
-import picasso.parser.language.expressions.Atan;
+import picasso.parser.language.expressions.Sin;
 import picasso.parser.tokens.Token;
 
-
-
 /**
- * Handles parsing the atan function.
+ * Handles parsing the Sin function.
  * 
- * @author Therese Elvira Mombou Gatsing
+ * @author Luis Coronel
  * 
  */
 
-public class AtanAnalyzer extends UnaryFunctionAnalyzer {
-	
+public class SinAnalyzer extends UnaryFunctionAnalyzer {
+
 	@Override
 	public ExpressionTreeNode generateExpressionTree(Stack<Token> tokens) {
 		tokens.pop(); 
 		ExpressionTreeNode paramETN = SemanticAnalyzer.getInstance().generateExpressionTree(
 				tokens);
-		return new Atan(paramETN);
+		return new Sin(paramETN);
 	}
 
 

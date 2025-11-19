@@ -10,7 +10,7 @@ import picasso.parser.tokens.Token;
  * Handles parsing the plus or "addition function".
  * 
  * @author Robert C. Duvall
- * @author Sara Sprenkle
+ * @author Asya Yurkovskaya
  * 
  */
 public class PlusAnalyzer extends BinaryOperatorAnalyzer {

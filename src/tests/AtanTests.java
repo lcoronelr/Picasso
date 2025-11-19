@@ -17,7 +17,7 @@ import picasso.parser.Tokenizer;
 import picasso.parser.language.ExpressionTreeNode;
 // import picasso.parser.language.expressions.Addition;
 import picasso.parser.language.expressions.RGBColor;
-import picasso.parser.language.expressions.Atangent;
+import picasso.parser.language.expressions.Atan;
 import picasso.parser.language.expressions.Floor;
 import picasso.parser.language.expressions.X;
 import picasso.parser.language.expressions.Y;
@@ -57,7 +57,7 @@ public class AtanTests {
 	@Test
 	public void testAtanEvaluationBasic() {
 
-		Atangent myTree = new Atangent(new X());
+		Atan myTree = new Atan(new X());
 
 		RGBColor result0 = myTree.evaluate(0.0, 0.0);
 		assertEquals(0.0, result0.getRed(), EPSILON);
@@ -82,7 +82,7 @@ public class AtanTests {
 	@Test
 	public void testAtanOddSymmetry() {
 		// atan(-x) = -atan(x)
-		Atangent myTree = new Atangent(new X());
+		Atan myTree = new Atan(new X());
 
 		double xVal = 0.7;
 		RGBColor positive = myTree.evaluate(xVal, 0.0);
@@ -99,7 +99,7 @@ public class AtanTests {
 	@Test
 	public void atanFunctionTests() {
 		ExpressionTreeNode e = parser.makeExpression("atan(x)");
-		assertEquals(new Atangent(new X()), e);
+		assertEquals(new Atan(new X()), e);
 
 		
 		// e = parser.makeExpression("atan( x + y )");
@@ -108,15 +108,15 @@ public class AtanTests {
 
 	@Test
 	public void testToString() {
-		ExpressionTreeNode atan = new Atangent(new Y());
+		ExpressionTreeNode atan = new Atan(new Y());
 		assertEquals("Atangent(y)", atan.toString());
 	}
 
 	@Test
 	public void testEquals() {
-		ExpressionTreeNode atan = new Atangent(new Y());
-		ExpressionTreeNode atanSame = new Atangent(new Y());
-		ExpressionTreeNode atanDifferent = new Atangent(new X());
+		ExpressionTreeNode atan = new Atan(new Y());
+		ExpressionTreeNode atanSame = new Atan(new Y());
+		ExpressionTreeNode atanDifferent = new Atan(new X());
 
 		assertEquals(atan, atan);
 		assertEquals(atanSame, atan);
