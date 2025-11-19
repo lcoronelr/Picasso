@@ -2,6 +2,9 @@ package picasso.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JFrame;
 
 import picasso.model.Pixmap;
@@ -40,9 +43,18 @@ public class Frame extends JFrame {
 		// add commands to test here
 		ButtonPanel commands = new ButtonPanel(canvas);
 		commands.add("Open", new Reader());
-		commands.add("Evaluate", new ThreadedCommand<Pixmap>(canvas, new Evaluator()));
+		commands.add("Evaluate", new ThreadedCommand<Pixmap>(canvas, new Evaluator(expression)));
 		commands.add("Save", new Writer());
 
+		
+		// Add action listener so pressing Enter evaluates
+		expression.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new ThreadedCommand<Pixmap>(canvas, new Evaluator(expression)).execute(canvas.getPixmap());
+					canvas.refresh();
+					}
+				});
+			
 		//puts together the input panel and the commands panel
 		JPanel topPart = new JPanel(new BorderLayout());
 		topPart.add(inputPanel, BorderLayout.NORTH);
