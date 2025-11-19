@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import picasso.parser.ExpressionTreeGenerator;
 import picasso.parser.Tokenizer;
 import picasso.parser.language.ExpressionTreeNode;
-import picasso.parser.language.expressions.Plus;
 import picasso.parser.language.expressions.RGBColor;
 import picasso.parser.language.expressions.Atan;
 import picasso.parser.language.expressions.Floor;
