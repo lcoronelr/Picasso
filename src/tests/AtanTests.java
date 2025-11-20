@@ -102,8 +102,8 @@ public class AtanTests {
 		assertEquals(new Atan(new X()), e);
 
 		
-		// e = parser.makeExpression("atan( x + y )");
-		// assertEquals(new Atangent(new Plus(new X(), new Y())), e);
+		e = parser.makeExpression("atan( x + y )");
+		assertEquals(new Atan(new Plus(new X(), new Y())), e);
 	}
 
 	@Test
@@ -124,7 +124,7 @@ public class AtanTests {
 		assertNotEquals(atan, atanDifferent);
 		assertNotEquals(atanDifferent, atanSame);
 
-		// another unary function should not equal Atangent
+		// another unary function should not equal Atan
 		ExpressionTreeNode other = new Floor(new Y());
 		assertNotEquals(atan, other);
 	}

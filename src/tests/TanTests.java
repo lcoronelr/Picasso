@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import picasso.parser.ExpressionTreeGenerator;
 import picasso.parser.Tokenizer;
 import picasso.parser.language.ExpressionTreeNode;
-//import picasso.parser.language.expressions.Plus;
+import picasso.parser.language.expressions.Plus;
 import picasso.parser.language.expressions.RGBColor;
 import picasso.parser.language.expressions.Tan;
 import picasso.parser.language.expressions.Floor;
@@ -101,8 +101,8 @@ public class TanTests {
 		ExpressionTreeNode e = parser.makeExpression("tan(x)");
 		assertEquals(new Tan(new X()), e);
 
-		//e = parser.makeExpression("tan( x + y )");
-		//assertEquals(new Tangent(new Plus(new X(), new Y())), e);
+		e = parser.makeExpression("tan( x + y )");
+		assertEquals(new Tan(new Plus(new X(), new Y())), e);
 	}
 
 	@Test
