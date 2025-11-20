@@ -98,7 +98,7 @@ class LogTests{
 	
 	@Test
 	public void LogFunctionTests() {
-		ExpressionTreeNode e = parser.makeExpression("Log(x)");
+		ExpressionTreeNode e = parser.makeExpression("log(x)");
 		assertEquals(new Log(new X()), e);
 
 		e = parser.makeExpression("log(x + y)");
@@ -127,7 +127,7 @@ class LogTests{
 
 	@Test
 	public void testTokenizeBasicFunctionExpression() {
-		String expression = "Log(x)";
+		String expression = "log(x)";
 		List<Token> tokens = tokenizer.parseTokens(expression);
 		assertEquals(new LogToken(), tokens.get(0));
 		assertEquals(new LeftParenToken(), tokens.get(1));
