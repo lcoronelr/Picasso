@@ -28,9 +28,7 @@ import picasso.parser.tokens.chars.RightParenToken;
 import picasso.parser.tokens.functions.ClampToken;
 
 /**
- * This organization doesn't take advantage of the @BeforeEach set up step, but
- * it may be easier to think about the tests this way. (Duplicates some tests
- * from other JUnit Test Classes.)
+ * Tests for the Clamp function
  * 
  * @author Menilik Deneke
  */
@@ -40,9 +38,7 @@ class ClampTests {
 	private Tokenizer tokenizer;
 
 	/**
-	 * Just need to get the semantic analyzer once. Calling getInstance again
-	 * doesn't get a new/fresh instance.
-	 * 
+	 *  
 	 * @throws java.lang.Exception
 	 */
 	@BeforeAll
