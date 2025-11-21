@@ -1,8 +1,10 @@
 package picasso.parser;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Stack;
 
 import picasso.parser.language.ExpressionTreeNode;
+import picasso.parser.language.expressions.BinaryOperator;
 import picasso.parser.tokens.Token;
 
 /**
@@ -12,9 +14,31 @@ import picasso.parser.tokens.Token;
  * 
  */
 public abstract class BinaryOperatorAnalyzer implements SemanticAnalyzerInterface {
-	 
-    // TODO: figure out a way to refactor
+
 	@Override
-	public abstract ExpressionTreeNode generateExpressionTree(
-			Stack<Token> tokens);
+	public ExpressionTreeNode generateExpressionTree(Stack<Token> tokens) {
+		Token topToken = tokens.pop(); 
+		Class<?> topTokenClass = topToken.getClass();
+		String topTokenName = topTokenClass.getCanonicalName();
+		String topExpressionName = topTokenName.replace("tokens", "language.expressions").replace("Token", "");
+
+		ExpressionTreeNode paramETNRight = SemanticAnalyzer.getInstance().generateExpressionTree(
+			tokens);
+		ExpressionTreeNode paramETNLeft = SemanticAnalyzer.getInstance().generateExpressionTree(
+				tokens);
+
+		BinaryOperator topExpression = null;
+
+		try {
+			topExpression = (BinaryOperator) Class.forName(topExpressionName).getDeclaredConstructor().newInstance(paramETNLeft, paramETNRight);	
+		} catch (ClassNotFoundException e) {
+			throw new ParseException(topExpression + " not found " + e);
+		} catch (InstantiationException e) {
+			throw new ParseException(topExpression + " not instantiated " + e);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+			throw new ParseException(topExpression + " not creatable " + e);
+		}
+
+		return topExpression;
+	}
 }
