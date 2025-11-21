@@ -24,7 +24,7 @@ import picasso.parser.language.expressions.RgbToYCrCb;
  * Blue channel  = Cr  red difference
  * 
  * @author Luis Coronel
- * 
+ * @author Abhishek Pradhan
  * 
  */
 
@@ -98,6 +98,46 @@ public class RgbToYCrCbTests {
 		assertTrue(result.getRed() > 0.0, "Y should be high for green");
 	}
 
+	/**
+	 * Test to see if the RGB to YCrCb image is in greyscale, or if the Cr and Cb values are equal to zero, resulting 
+	 * in only the luminance varying 
+	 */
+	@Test
+	public void testRgbToYCrCbGreyscale() {
+		RGBColor grey = new RGBColor (0.2, 0.2, 0.2);
+		RgbToYCrCb converter = new RgbToYCrCb(grey);
+		
+		RGBColor result = converter.evaluate(0,0);
+		
+		//Y (Red Channel) should be between -1 and 1 (within range) when the RgbToYCrCb returns the value
+		assertTrue(result.getRed() >=-1 && result.getRed()<=1, "Y should be in [-1,1] range for greyscale");
+		
+		//Cb (Green Channel) should be 0 for greyscale
+		assertEquals (0.0, result.getGreen(), EPSILON, "Cb should be zero for any greyscale color");
+		
+		//Cr (Blue Channel) should be 0
+		assertEquals (0.0, result.getBlue(), EPSILON, "Cr should be zero for any greyscale color");
+		
+	}
+	/**
+	 * Tests that the brightness (Luminance) or the Y' value increases or not
+	 */
+	@Test
+	public void testLuminanceChange() {
+	    RGBColor dark = new RGBColor(-1, -1, -1);
+	    RGBColor mid  = new RGBColor( 0,  0,  0);
+	    RGBColor bright = new RGBColor(1, 1, 1);
+
+	    RgbToYCrCb convertDark = new RgbToYCrCb(dark);
+	    RgbToYCrCb convertMid  = new RgbToYCrCb(mid);
+	    RgbToYCrCb convertBright = new RgbToYCrCb(bright);
+
+	    double Ydark = convertDark.evaluate(0,0).getRed();
+	    double Ymid = convertMid.evaluate(0,0).getRed();
+	    double Ybright = convertBright.evaluate(0,0).getRed();
+
+	    assertTrue(Ydark < Ymid, "Dark should have lower luminance than grey");
+	    assertTrue(Ymid < Ybright, "Grey should have lower luminance than white");
+	}
 
 }
-
