@@ -58,26 +58,28 @@ class ClampTests {
 	@Test
 	public void testClampEvaluation() {
 		Clamp myTree = new Clamp(new X());
+		
+		// Test above range
+	    assertEquals(new RGBColor(1, 1, 1), myTree.evaluate(2.5, -1));
+	    assertEquals(new RGBColor(1, 1, 1), myTree.evaluate(1.0001, -1));
 
-		// some straightforward tests
-		assertEquals(new RGBColor(1, 1, 1), myTree.evaluate(3, 3));
-		assertEquals(new RGBColor(-1, -1, -1), myTree.evaluate(-3, -3));
-		assertEquals(new RGBColor(-0.5, -0.5, -0.5), myTree.evaluate(-.5, -.5));
+	    // Test below range  
+	    assertEquals(new RGBColor(-1, -1, -1), myTree.evaluate(-2.5, -1));
+	    assertEquals(new RGBColor(-1, -1, -1), myTree.evaluate(-1.0001, -1));
 
-		// test the ints; remember that y's value doesn't matter
-		for (int i = -1; i <= 1; i++) {
-			assertEquals(new RGBColor(i, i, i), myTree.evaluate(i, -i));
-			assertEquals(new RGBColor(i, i, i), myTree.evaluate(i, i));
-		}
+	    // Test exact boundaries
+	    assertEquals(new RGBColor(1, 1, 1), myTree.evaluate(1.0, -1));
+	    assertEquals(new RGBColor(-1, -1, -1), myTree.evaluate(-1.0, -1));
 
-		double[] tests = { -.7, -.00001, .000001, .5 };
+	    // Test within range
+	    assertEquals(new RGBColor(0.5, 0.5, 0.5), myTree.evaluate(0.5, -1));
+	    assertEquals(new RGBColor(-0.7, -0.7, -0.7), myTree.evaluate(-0.7, -1));
+	    assertEquals(new RGBColor(0, 0, 0), myTree.evaluate(0, 0));
 
-		for (double testVal : tests) {
-			double clampOfTestVal = Math.clamp(testVal, -1, 1); // clamp each test to range [-1, 1]
-			assertEquals(new RGBColor(clampOfTestVal, clampOfTestVal, clampOfTestVal), myTree.evaluate(testVal, -1));
-			assertEquals(new RGBColor(clampOfTestVal, clampOfTestVal, clampOfTestVal),
-					myTree.evaluate(testVal, testVal));
-		}
+	    // Test edge cases
+	    assertEquals(new RGBColor(1, 1, 1), myTree.evaluate(Double.MAX_VALUE, 0));
+	    assertEquals(new RGBColor(-1, -1, -1), myTree.evaluate(-Double.MAX_VALUE, 0));
+	    
 	}
 
 	@Test
