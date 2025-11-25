@@ -44,8 +44,8 @@ public class ExpressionTreeGenerator {
 		// 1) if the user typed only a string like "a", we check to see if it was mapped already
 		// If so, we just reuse the stored expression tree
 		
-		if ( !infix.contains("=") && variables.containsKey(infix)) {
-			return variables.get(infix);
+		if ( !infix.contains("=") && variables.containsKey(infix.trim())) {
+			return variables.get(infix.trim());
 		}
 		
 		
@@ -55,8 +55,8 @@ public class ExpressionTreeGenerator {
 		
 		if (equalIndex >0) {
 			
-			String left = infix.substring(0, equalIndex);
-			String right = infix.substring(equalIndex+1);
+			String left = infix.substring(0, equalIndex).trim();
+			String right = infix.substring(equalIndex+1).trim();
 			
 			//Build the expression tree based on the right hand side of the expression
 			ExpressionTreeNode rightTree = makeExpression(right);
