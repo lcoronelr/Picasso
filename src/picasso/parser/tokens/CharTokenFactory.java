@@ -11,6 +11,7 @@ import picasso.parser.tokens.operations.*;
  * 
  * @author Owen Astrachan
  * @author Sara Sprenkle
+ * @author Therese Elvira Mombou Gatsing
  */
 public class CharTokenFactory {
 

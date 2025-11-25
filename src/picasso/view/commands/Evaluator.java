@@ -15,6 +15,7 @@ import picasso.util.Command;
  * @author Robert C Duvall
  * @author Sara Sprenkle
  * @author Luis Coronel
+ * @author Therese Elvira Mombou Gatsing
  */
 public class Evaluator implements Command<Pixmap> {
 	
