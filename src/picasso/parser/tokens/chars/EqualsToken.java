@@ -1,8 +1,8 @@
 package picasso.parser.tokens.chars;
 
 import picasso.parser.language.CharConstants;
-import picasso.parser.tokens.chars.CharToken;
-
+import picasso.parser.tokens.chars.*;
+import picasso.parser.tokens.operations.*;
 
 /**
  * Represents the '=' character 
@@ -12,7 +12,7 @@ import picasso.parser.tokens.chars.CharToken;
 
 public class EqualsToken extends CharToken {
 	public EqualsToken() {
-		super(CharConstants.EQUALS);
+		super(CharConstants.EQUAL);
 	}
 	
 	
