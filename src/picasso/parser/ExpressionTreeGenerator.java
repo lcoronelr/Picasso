@@ -1,5 +1,8 @@
 package picasso.parser;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
@@ -16,8 +19,12 @@ import picasso.parser.tokens.operations.*;
  * @author former student solution
  * @author Robert C. Duvall (added comments, exceptions)
  * @author Sara Sprenkle modified for Picasso
+ * @author Therese Elvira Mombou Gatsing added handling for assignment 
  */
 public class ExpressionTreeGenerator {
+	
+	
+	private Map<String, ExpressionTreeNode> variables = new HashMap<>();
 
 	// TODO: Do these belong here?
 	private static final int CONSTANT = 0;
@@ -34,6 +41,34 @@ public class ExpressionTreeGenerator {
 	 *         formula.
 	 */
 	public ExpressionTreeNode makeExpression(String infix) {
+		
+		// 1) if the user typed only a string like "a", we check to see if it was mapped already
+		// If so, we just reuse the stored expression tree
+		
+		if ( !infix.contains("=") && variables.containsKey(infix.trim())) {
+			return variables.get(infix.trim());
+		}
+		
+		
+		//2) If an input of the form "a = x+y" is given, we map it and store the expression tree
+		
+		int equalIndex = infix.indexOf("=");
+		
+		if (equalIndex >0) {
+			
+			String left = infix.substring(0, equalIndex).trim();
+			String right = infix.substring(equalIndex+1).trim();
+			
+			//Build the expression tree based on the right hand side of the expression
+			ExpressionTreeNode rightTree = makeExpression(right);
+			
+			variables.put(left, rightTree);
+			
+			return rightTree;
+			
+		}
+		
+		//3) Otherwise do the following 
 		Stack<Token> postfix = infixToPostfix(infix);
 
 		if (postfix.isEmpty()) {
