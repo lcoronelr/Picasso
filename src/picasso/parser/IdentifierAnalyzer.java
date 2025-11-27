@@ -28,6 +28,7 @@ public class IdentifierAnalyzer implements SemanticAnalyzerInterface {
 
 	@Override
 	public ExpressionTreeNode generateExpressionTree(Stack<Token> tokens) {
+		
 		IdentifierToken t = (IdentifierToken) tokens.pop();
 		String id = t.getName();
 		ExpressionTreeNode mapped = idToExpression.get(id);
@@ -35,6 +36,15 @@ public class IdentifierAnalyzer implements SemanticAnalyzerInterface {
 			return mapped;
 		}
 
+	    Map<String, ExpressionTreeNode> vars = SemanticAnalyzer.getInstance().getVariables();
+	    if (vars != null) {
+	        mapped = vars.get(id);
+	        if (mapped != null) {
+	            return mapped;
+	        }
+	    }
+		
+		
 		// TODO : What should we do if we don't recognize the identifier?
 		// Is that an error? Or, could there a valid reason?
 		return null;
