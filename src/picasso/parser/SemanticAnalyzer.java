@@ -22,6 +22,8 @@ public class SemanticAnalyzer implements SemanticAnalyzerInterface {
 
 	private Map<Class<?>, SemanticAnalyzerInterface> tokenToSemAnalyzer;
 	private static SemanticAnalyzer ourInstance;
+	
+	private Map<String, ExpressionTreeNode> variables;
 
 	private static final String PARSER_PACKAGE = "picasso.parser.";
 	private static final String OPERATIONS_TOKENS_PACKAGE = PARSER_PACKAGE + "tokens.operations.";
