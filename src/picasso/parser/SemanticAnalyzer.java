@@ -29,6 +29,15 @@ public class SemanticAnalyzer implements SemanticAnalyzerInterface {
 	private static final String OPERATIONS_TOKENS_PACKAGE = PARSER_PACKAGE + "tokens.operations.";
 	private static final String TOKENS_PACKAGE_NAME = PARSER_PACKAGE + "tokens.";
 	private static final String OPS_FILE = "conf/operations.prop";
+	
+	
+    public void setVariables(Map<String, ExpressionTreeNode> variables) {
+        this.variables = variables;
+    }
+
+    public Map<String, ExpressionTreeNode> getVariables() {
+        return variables;
+    }
 
 	/**
 	 * Make sure that there is only one semantic analyzer for the application.
