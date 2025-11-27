@@ -76,6 +76,8 @@ public class ExpressionTreeGenerator {
 		}
 
 		SemanticAnalyzer semAnalyzer = SemanticAnalyzer.getInstance();
+		
+		semAnalyzer.setVariables(variables);
 
 		ExpressionTreeNode root = semAnalyzer.generateExpressionTree(postfix);
 
