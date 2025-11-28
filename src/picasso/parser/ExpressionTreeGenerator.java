@@ -59,6 +59,17 @@ public class ExpressionTreeGenerator {
 			String left = infix.substring(0, equalIndex).trim();
 			String right = infix.substring(equalIndex+1).trim();
 			
+			// LHS must be a simple identifier
+		    if (!left.matches("[A-Za-z_][A-Za-z0-9_]*")) {
+		        throw new ParseException("Left-hand side of assignment must be a single name, got: \"" + left + "\"");
+		    }
+
+		    // Prevents assigning to built-in identifiers x and y
+		    if (left.equals("x") || left.equals("y")) {
+		        throw new ParseException("Cannot assign to built-in identifier \"" + left + "\"");
+		    }
+
+			
 			//Build the expression tree based on the right hand side of the expression
 			ExpressionTreeNode rightTree = makeExpression(right);
 			
@@ -76,6 +87,8 @@ public class ExpressionTreeGenerator {
 		}
 
 		SemanticAnalyzer semAnalyzer = SemanticAnalyzer.getInstance();
+		
+		semAnalyzer.setVariables(variables);
 
 		ExpressionTreeNode root = semAnalyzer.generateExpressionTree(postfix);
 
