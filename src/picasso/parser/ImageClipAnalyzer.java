@@ -27,11 +27,6 @@ public class ImageClipAnalyzer implements SemanticAnalyzerInterface {
 		
 		// Get x coordinate expression
 		ExpressionTreeNode xCoord = SemanticAnalyzer.getInstance().generateExpressionTree(tokens);
-		
-		// Get filename (should be at bottom, now on top)
-		if (tokens.isEmpty() || !(tokens.peek() instanceof StringToken)) {
-			throw new ParseException("imageClip expects a string filename");
-		}
 		String filename = ((StringToken) tokens.pop()).getValue();
 		
 		return new ImageClip(filename, xCoord, yCoord);
