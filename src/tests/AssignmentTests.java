@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
 import picasso.parser.ExpressionTreeGenerator;
+import picasso.parser.ParseException;
 import picasso.parser.language.ExpressionTreeNode;
 import picasso.parser.language.expressions.*;
 import picasso.parser.tokens.IdentifierToken;
@@ -69,4 +70,61 @@ public class AssignmentTests {
 	    }
 
 
+	@Test
+	public void testAssignedVariableInExpression() {
+
+	    parser.makeExpression("sine = sin(x)");
+	    ExpressionTreeNode direct = parser.makeExpression("sin(x) + x");
+	    ExpressionTreeNode viaVar = parser.makeExpression("sine + x");
+
+	    double x = 0.2;
+	    double y = 0.0;
+
+	    RGBColor expected = direct.evaluate(x, y);
+	    RGBColor actual   = viaVar.evaluate(x, y);
+
+	    assertEquals(expected.getRed(),   actual.getRed(),   EPSILON);
+	    assertEquals(expected.getGreen(), actual.getGreen(), EPSILON);
+	    assertEquals(expected.getBlue(),  actual.getBlue(),  EPSILON);
+	}
+	
+	@Test
+	public void testCannotAssignToX() {
+	    assertThrows(ParseException.class, () -> {
+	        parser.makeExpression("x = y + 1");
+	    });
+	}
+
+	@Test
+	public void testCannotAssignToY() {
+	    assertThrows(ParseException.class, () -> {
+	        parser.makeExpression("y = x");
+	    });
+	}
+
+	@Test
+	public void testLhsMustBeSingleIdentifier() {
+	    assertThrows(ParseException.class, () -> {
+	        parser.makeExpression("x + y = x");
+	    });
+
+	    assertThrows(ParseException.class, () -> {
+	        parser.makeExpression("3a = x");
+	    });
+	}
+	
+	@Test
+	public void testLhsMustNotBeEmpty() {
+		 assertThrows(ParseException.class, () -> {
+		        parser.makeExpression(" = x");
+		  });
+		
+	}
+	
+	@Test
+	public void testValidAssignmentNameAllowed() {
+	    assertDoesNotThrow(() -> {
+	        parser.makeExpression("foo1 = x + y");
+	    });
+	}
 }
