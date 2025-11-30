@@ -1,7 +1,7 @@
 package picasso.parser.tokens.functions;
 
 /**
- * Represents the imageClip function token
+ * Represents the imageWrap function token
  *
  * @author Luis Coronel
  */
