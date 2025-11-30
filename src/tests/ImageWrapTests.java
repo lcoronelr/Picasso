@@ -45,14 +45,14 @@ public class ImageWrapTests {
 	}
 
 	@Test
-	public void testimageWrapCreation() {
+	public void testImageWrapCreation() {
 		// Test that imageWrap object can be created
 		ImageWrap img = new ImageWrap("images/vortex.jpg", new X(), new Y());
-		assertNotNull(img, "imageWrap iss created successfully");
+		assertNotNull(img, "imageWrap is created successfully");
 	}
 
 	@Test
-	public void testimageWrapEvaluationReturnsColor() {
+	public void testImageWrapEvaluationReturnsColor() {
 		// Test that evaluation returns a valid RGBColor
 		ImageWrap img = new ImageWrap("images/vortex.jpg", new X(), new Y());
 		RGBColor result = img.evaluate(0.0, 0.0);
@@ -67,7 +67,7 @@ public class ImageWrapTests {
 	}
 
 	@Test
-	public void testimageWrapClamping() {
+	public void testImageWrapClamping() {
 		// Test that coordinates outside [-1,1] are clamped
 		ImageWrap img = new ImageWrap("images/vortex.jpg", new X(), new Y());
 		
@@ -81,7 +81,7 @@ public class ImageWrapTests {
 	}
 
 	@Test
-	public void testimageWrapEquals() {
+	public void testImageWrapEquals() {
 		ImageWrap img1 = new ImageWrap("images/vortex.jpg", new X(), new Y());
 		ImageWrap img2 = new ImageWrap("images/vortex.jpg", new X(), new Y());
 		ImageWrap img3 = new ImageWrap("images/vortex.jpg", new Y(), new X());
@@ -92,12 +92,12 @@ public class ImageWrapTests {
 	}
 
 	@Test
-	public void testimageWrapToString() {
+	public void testImageWrapToString() {
 		ImageWrap img = new ImageWrap("images/vortex.jpg", new X(), new Y());
 		String result = img.toString();
 		
 		assertTrue(result.contains("imageWrap"), "toString have 'imageWrap'");
-		assertTrue(result.contains("car.jpg"), "toString have filename");
+		assertTrue(result.contains("vortex.jpg"), "toString have filename");
 		assertTrue(result.contains("x"), "toString have the x coordinate");
 		assertTrue(result.contains("y"), "toString have the y coordinate");
 	}
@@ -125,18 +125,10 @@ public class ImageWrapTests {
 				"The Parser should be able to create imageWrap expression tree");
 	}
 
-	@Test
-	public void testimageWrapWithDifferentCoordinates() {
-		// Test that different coordinate expressions work
-		ImageWrap img1 = new ImageWrap("images/vortex.jpg", new X(), new Y());
-		ImageWrap img2 = new ImageWrap("images/vortex.jpg", new Y(), new X());
-		
-		// Different coordinate order should create different imageWrap objects
-		assertNotEquals(img1, img2, "imageWraps with swapped coordinates should not be equal");
-	}
+
 
 	@Test
-	public void testimageWrapColorRange() {
+	public void testImageWrapColorRange() {
 		// Test that colors are properly converted from [0,255] to [-1,1]
 		ImageWrap img = new ImageWrap("images/vortex.jpg", new X(), new Y());
 		
