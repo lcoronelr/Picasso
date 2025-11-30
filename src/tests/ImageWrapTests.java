@@ -103,7 +103,7 @@ public class ImageWrapTests {
 	}
 
 	@Test
-	public void testTokenizeimageWrapExpression() {
+	public void testTokenizeImageWrapExpression() {
 		String expression = "imageWrap(\"images/vortex.jpg\", x, y)";
 		List<Token> tokens = tokenizer.parseTokens(expression);
 		
