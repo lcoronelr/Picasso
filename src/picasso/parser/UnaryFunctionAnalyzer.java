@@ -8,12 +8,12 @@ import picasso.parser.language.expressions.UnaryFunction;
 import picasso.parser.tokens.Token;
 
 /**
- * Abstract class that parses a function that takes one expression as a parameter.
+ * A class that parses a function that takes one expression as a parameter.
  * 
  * @author Asya Yurkovskaya
  * 
  */
-public abstract class UnaryFunctionAnalyzer implements SemanticAnalyzerInterface {
+public class UnaryFunctionAnalyzer implements SemanticAnalyzerInterface {
 	 
 	@Override
 	public ExpressionTreeNode generateExpressionTree(Stack<Token> tokens) {

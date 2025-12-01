@@ -8,12 +8,12 @@ import picasso.parser.language.expressions.BinaryOperator;
 import picasso.parser.tokens.Token;
 
 /**
- * Abstract class that parses an operator that takes two expressions as parameters.
+ * A class that parses an operator that takes two expressions as parameters.
  * 
  * @author Asya Yurkovskaya
  * 
  */
-public abstract class BinaryOperatorAnalyzer implements SemanticAnalyzerInterface {
+public class BinaryOperatorAnalyzer implements SemanticAnalyzerInterface {
 
 	@Override
 	public ExpressionTreeNode generateExpressionTree(Stack<Token> tokens) {
