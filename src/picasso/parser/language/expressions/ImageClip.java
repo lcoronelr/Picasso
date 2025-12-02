@@ -4,18 +4,18 @@ import picasso.model.Pixmap;
 import picasso.parser.language.ExpressionTreeNode;
 
 /**
- * Represents the imageWrap function - imports an image and wraps it
+ * Represents the ImageClip function - imports an image and wraps it
  *
  * @author Luis Coronel
  */
-public class ImageWrap extends ExpressionTreeNode {
+public class ImageClip extends ExpressionTreeNode {
 
 	private String filename;
 	private ExpressionTreeNode xCoord;
 	private ExpressionTreeNode yCoord;
 	private Pixmap image;
 
-	public ImageWrap(String filename, ExpressionTreeNode xCoord, ExpressionTreeNode yCoord) {
+	public ImageClip(String filename, ExpressionTreeNode xCoord, ExpressionTreeNode yCoord) {
 		this.filename = filename;
 		this.xCoord = xCoord;
 		this.yCoord = yCoord;
@@ -65,8 +65,8 @@ public class ImageWrap extends ExpressionTreeNode {
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == this) return true;
-		if (!(obj instanceof ImageWrap)) return false;
-		ImageWrap other = (ImageWrap) obj;
+		if (!(obj instanceof ImageClip)) return false;
+		ImageClip other = (ImageClip) obj;
 		return filename.equals(other.filename) &&
 		       xCoord.equals(other.xCoord) &&
 		       yCoord.equals(other.yCoord);
@@ -74,6 +74,6 @@ public class ImageWrap extends ExpressionTreeNode {
 
 	@Override
 	public String toString() {
-		return "imageWrap(\"" + filename + "\", " + xCoord + ", " + yCoord + ")";
+		return "ImageClip(\"" + filename + "\", " + xCoord + ", " + yCoord + ")";
 	}
 }

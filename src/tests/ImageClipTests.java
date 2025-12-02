@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import picasso.parser.ExpressionTreeGenerator;
 import picasso.parser.Tokenizer;
 import picasso.parser.language.ExpressionTreeNode;
-import picasso.parser.language.expressions.ImageWrap;
+import picasso.parser.language.expressions.ImageClip;
 import picasso.parser.language.expressions.RGBColor;
 import picasso.parser.language.expressions.X;
 import picasso.parser.language.expressions.Y;
@@ -21,14 +21,14 @@ import picasso.parser.tokens.IdentifierToken;
 import picasso.parser.tokens.chars.LeftParenToken;
 import picasso.parser.tokens.chars.RightParenToken;
 import picasso.parser.tokens.chars.CommaToken;
-import picasso.parser.tokens.functions.ImageWrapToken;
+import picasso.parser.tokens.functions.ImageClipToken;
 
 /**
- * Tests for the imageWrap function.
+ * Tests for the ImageClip function.
  * 
  * @author Luis Coronel
  */
-public class ImageWrapTests {
+public class ImageClipTests {
 
 	private static ExpressionTreeGenerator parser;
 	private Tokenizer tokenizer;
@@ -45,16 +45,16 @@ public class ImageWrapTests {
 	}
 
 	@Test
-	public void testImageWrapCreation() {
-		// Test that imageWrap object can be created
-		ImageWrap img = new ImageWrap("images/vortex.jpg", new X(), new Y());
-		assertNotNull(img, "imageWrap is created successfully");
+	public void testImageClipCreation() {
+		// Test that ImageClip object can be created
+		ImageClip img = new ImageClip("images/vortex.jpg", new X(), new Y());
+		assertNotNull(img, "ImageClip is created successfully");
 	}
 
 	@Test
-	public void testImageWrapEvaluationReturnsColor() {
+	public void testImageClipEvaluationReturnsColor() {
 		// Test that evaluation returns a valid RGBColor
-		ImageWrap img = new ImageWrap("images/vortex.jpg", new X(), new Y());
+		ImageClip img = new ImageClip("images/vortex.jpg", new X(), new Y());
 		RGBColor result = img.evaluate(0.0, 0.0);
 		
 		assertNotNull(result, "Evaluation should return a color");
@@ -67,9 +67,9 @@ public class ImageWrapTests {
 	}
 
 	@Test
-	public void testImageWrapClamping() {
+	public void testImageClipClamping() {
 		// Test that coordinates outside [-1,1] are clamped
-		ImageWrap img = new ImageWrap("images/vortex.jpg", new X(), new Y());
+		ImageClip img = new ImageClip("images/vortex.jpg", new X(), new Y());
 		
 		// Evaluate at corner (should clamp to edges)
 		RGBColor corner1 = img.evaluate(-1.0, -1.0);
@@ -81,33 +81,33 @@ public class ImageWrapTests {
 	}
 
 	@Test
-	public void testImageWrapEquals() {
-		ImageWrap img1 = new ImageWrap("images/vortex.jpg", new X(), new Y());
-		ImageWrap img2 = new ImageWrap("images/vortex.jpg", new X(), new Y());
-		ImageWrap img3 = new ImageWrap("images/vortex.jpg", new Y(), new X());
+	public void testImageClipEquals() {
+		ImageClip img1 = new ImageClip("images/vortex.jpg", new X(), new Y());
+		ImageClip img2 = new ImageClip("images/vortex.jpg", new X(), new Y());
+		ImageClip img3 = new ImageClip("images/vortex.jpg", new Y(), new X());
 		
-		assertEquals(img1, img1, "imageWrap should equal itself");
-		assertEquals(img1, img2, "imageWraps with same params should be equal");
-		assertNotEquals(img1, img3, "imageWraps with different coordinates should not be equal");
+		assertEquals(img1, img1, "ImageClip should equal itself");
+		assertEquals(img1, img2, "ImageClips with same params should be equal");
+		assertNotEquals(img1, img3, "ImageClips with different coordinates should not be equal");
 	}
 
 	@Test
-	public void testImageWrapToString() {
-		ImageWrap img = new ImageWrap("images/vortex.jpg", new X(), new Y());
+	public void testImageClipToString() {
+		ImageClip img = new ImageClip("images/vortex.jpg", new X(), new Y());
 		String result = img.toString();
 		
-		assertTrue(result.contains("imageWrap"), "toString have 'imageWrap'");
+		assertTrue(result.contains("ImageClip"), "toString have 'ImageClip'");
 		assertTrue(result.contains("vortex.jpg"), "toString have filename");
 		assertTrue(result.contains("x"), "toString have the x coordinate");
 		assertTrue(result.contains("y"), "toString have the y coordinate");
 	}
 
 	@Test
-	public void testTokenizeImageWrapExpression() {
-		String expression = "imageWrap(\"images/vortex.jpg\", x, y)";
+	public void testTokenizeImageClipExpression() {
+		String expression = "ImageClip(\"images/vortex.jpg\", x, y)";
 		List<Token> tokens = tokenizer.parseTokens(expression);
 		
-		assertEquals(new ImageWrapToken(), tokens.get(0), "First token is imageWrapToken");
+		assertEquals(new ImageClipToken(), tokens.get(0), "First token is ImageClipToken");
 		assertEquals(new LeftParenToken(), tokens.get(1), "Second token is (");
 		assertTrue(tokens.get(2) instanceof StringToken, "Third token is StringToken");
 		assertEquals(new CommaToken(), tokens.get(3), "Fourth token is comma");
@@ -118,19 +118,19 @@ public class ImageWrapTests {
 	}
 
 	@Test
-	public void testParseImageWrapExpression() {
-		// Test that parser creates correct imageWrap expression tree
-		ExpressionTreeNode e = parser.makeExpression("imageWrap(\"images/vortex.jpg\", x, y)");
-		assertEquals(new ImageWrap("images/vortex.jpg", new X(), new Y()), e,
-				"The Parser should be able to create imageWrap expression tree");
+	public void testParseImageClipExpression() {
+		// Test that parser creates correct ImageClip expression tree
+		ExpressionTreeNode e = parser.makeExpression("ImageClip(\"images/vortex.jpg\", x, y)");
+		assertEquals(new ImageClip("images/vortex.jpg", new X(), new Y()), e,
+				"The Parser should be able to create ImageClip expression tree");
 	}
 
 
 
 	@Test
-	public void testImageWrapColorRange() {
+	public void testImageClipColorRange() {
 		// Test that colors are properly converted from [0,255] to [-1,1]
-		ImageWrap img = new ImageWrap("images/vortex.jpg", new X(), new Y());
+		ImageClip img = new ImageClip("images/vortex.jpg", new X(), new Y());
 		
 		// Sample multiple points
 		double[] testPoints = {-1.0, -0.5, 0.0, 0.5, 1.0};
