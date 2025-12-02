@@ -60,5 +60,7 @@ public abstract class BinaryOperator extends ExpressionTreeNode {
 		return true;
 	}
 
+	
+	
 }
 
