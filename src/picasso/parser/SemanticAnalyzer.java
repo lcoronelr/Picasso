@@ -16,17 +16,29 @@ import picasso.parser.tokens.TokenFactory;
  * 
  * @author Robert C. Duvall
  * @author Sara Sprenkle
+ * @author Therese Elvira Mombou Gatsing 
  * @author Asya Yurkovskaya
  */
 public class SemanticAnalyzer implements SemanticAnalyzerInterface {
 
     private Map<Class<?>, SemanticAnalyzerInterface> tokenToSemAnalyzer;
     private static SemanticAnalyzer ourInstance;
+	
+	private Map<String, ExpressionTreeNode> variables;
 
     private static final String PARSER_PACKAGE = "picasso.parser.";
     private static final String OPERATIONS_TOKENS_PACKAGE = PARSER_PACKAGE + "tokens.operations.";
     private static final String TOKENS_PACKAGE_NAME = PARSER_PACKAGE + "tokens.";
     private static final String OPS_FILE = "conf/operations.prop";
+	
+	
+    public void setVariables(Map<String, ExpressionTreeNode> variables) {
+        this.variables = variables;
+    }
+
+    public Map<String, ExpressionTreeNode> getVariables() {
+        return variables;
+    }
 
     /**
      * Make sure that there is only one semantic analyzer for the application.

@@ -15,8 +15,13 @@ import picasso.util.Command;
  * @author Robert C Duvall
  * @author Sara Sprenkle
  * @author Luis Coronel
+ * @author Therese Elvira Mombou Gatsing
  */
 public class Evaluator implements Command<Pixmap> {
+	
+	//made it final so assignments are remembered
+	private final ExpressionTreeGenerator expTreeGen = new ExpressionTreeGenerator();
+	
 	public static final double DOMAIN_MIN = -1;
 	public static final double DOMAIN_MAX = 1;
 	
@@ -72,16 +77,9 @@ public class Evaluator implements Command<Pixmap> {
 		// generate expression trees from strings, or you can create expression
 		// objects directly (as in the commented statement below).
 		String expressionText = expressionField.getText();
-		//String test = "floor(y)";
-		//String test = "atan(x)";
-		//String test = "x + y";
-		//String test = "y";
-		//String test = "x + y";
-
-		ExpressionTreeGenerator expTreeGen = new ExpressionTreeGenerator();
+		
 		return expTreeGen.makeExpression(expressionText);
 
-		// return new Multiply( new X(), new Y() );
 	}
 
 }

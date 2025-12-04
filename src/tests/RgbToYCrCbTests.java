@@ -4,6 +4,7 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +15,11 @@ import picasso.parser.Tokenizer;
 import picasso.parser.language.ExpressionTreeNode;
 import picasso.parser.language.expressions.RGBColor;
 import picasso.parser.language.expressions.RgbToYCrCb;
+import picasso.parser.language.expressions.X;
+import picasso.parser.language.expressions.Y;
+import picasso.parser.tokens.IdentifierToken;
+import picasso.parser.tokens.Token;
+import picasso.parser.tokens.functions.RgbToYCrCbToken;
 
 /**
  * Tests for the RgbToYCrCb function.
@@ -25,6 +31,7 @@ import picasso.parser.language.expressions.RgbToYCrCb;
  * 
  * @author Luis Coronel
  * @author Abhishek Pradhan
+ * @author Asya Yurkovskaya
  * 
  */
 
@@ -45,6 +52,16 @@ public class RgbToYCrCbTests {
 	@BeforeEach
 	public void setUp() throws Exception {
 		tokenizer = new Tokenizer();
+	}
+
+	@Test
+	public void basicTestsRgbToYCrCb() {
+		ExpressionTreeNode e = parser.makeExpression("rgbToYCrCb(x)");
+		assertEquals(new RgbToYCrCb(new X()), e);
+
+		String expression = "rgbToYCrCb(x)";
+		List<Token> tokens = tokenizer.parseTokens(expression);
+		assertEquals(new RgbToYCrCbToken(), tokens.get(0));
 	}
 
 	@Test

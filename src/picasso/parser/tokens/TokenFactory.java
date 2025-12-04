@@ -43,12 +43,14 @@ public class TokenFactory {
 				}
 				return t;
 			case '[':
-				// parse a color token if it starts with a [
-				return parseColorToken(tokenizer);
+			    // parse a color token if it starts with a [
+			    return parseColorToken(tokenizer);
+			case '"':
+			    // parse a string token
+			    return parseStringToken(tokenizer);
 			default:
-				Token ct = CharTokenFactory.getToken(result);
-
-				return ct;
+			    Token ct = CharTokenFactory.getToken(result);
+			    return ct;
 			}
 			
 			// TODO: Handle quoted strings
@@ -171,6 +173,32 @@ public class TokenFactory {
 		if (s.length() == 0)
 			return s;
 		return s.substring(0, 1).toUpperCase() + s.substring(1);
+	}
+	/**
+	 * Parse a StringToken
+	 * 
+	 * @param tokenizer
+	 * @return StringToken containing the string value
+	 */
+	private static StringToken parseStringToken(StreamTokenizer tokenizer) {
+	    StringBuilder sb = new StringBuilder();
+	    try {
+	        int ch;
+	        while ((ch = tokenizer.nextToken()) != '"' && ch != StreamTokenizer.TT_EOF) {
+	            if (ch == StreamTokenizer.TT_WORD) {
+	                sb.append(tokenizer.sval);
+	            } else if (ch == '/') {
+	                sb.append('/');
+	            } else if (ch == '.') {
+	                sb.append('.');
+	            } else if (ch > 0 && ch != StreamTokenizer.TT_NUMBER) {
+	                sb.append((char) ch);
+	            }
+	        }
+	    } catch (IOException e) {
+	        throw new ParseException("Error parsing string: " + e);
+	    }
+	    return new StringToken(sb.toString());
 	}
 
 }
