@@ -10,22 +10,31 @@ import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 
 import picasso.model.Pixmap;
+import picasso.util.ErrorReporter;
 import picasso.util.FileCommand;
 import picasso.util.ThreadedCommand;
 
 /**
  * Loads an expression from a file into the expression field and renders it.
  * @author Abhishek Pradhan
+ * @author Menilik Deneke - added some components for error reporting
  */
 public class ExpressionFileLoader extends FileCommand<Pixmap> {
 	private final JComponent view;
     private final JTextField expressionField;
+	private final ErrorReporter errorReporter; // Added
 
-	public ExpressionFileLoader(JComponent view, JTextField expressionField) {
+	public ExpressionFileLoader(JComponent view, JTextField expressionField, ErrorReporter errorReporter) { // Updated
         super(JFileChooser.OPEN_DIALOG);
 		this.view = view;
         this.expressionField = expressionField;
+		this.errorReporter = errorReporter;
     }
+	
+	// Backward compatibility constructor
+	public ExpressionFileLoader(JComponent view, JTextField expressionField) {
+		this(view, expressionField, null);
+	}
 
     @Override
     public void execute(Pixmap target) {
@@ -51,12 +60,23 @@ public class ExpressionFileLoader extends FileCommand<Pixmap> {
 			String expr = builder.toString();
 			expressionField.setText(expr);
 			if (!expr.isEmpty()) {
-				Evaluator evaluator = new Evaluator(expressionField);
+				// Use error reporter if available
+				Evaluator evaluator;
+				if (errorReporter != null) {
+					evaluator = new Evaluator(expressionField, errorReporter);
+				} else {
+					evaluator = new Evaluator(expressionField);
+				}
 				new ThreadedCommand<Pixmap>(view, evaluator).execute(target);
 			}
         } catch (IOException e) {
-			// keep UI silent on errors; log to console for debugging
-            e.printStackTrace();
+			// Report error if errorReporter is available
+			if (errorReporter != null) {
+				errorReporter.reportError("Error reading file: " + e.getMessage());
+			} else {
+				// keep UI silent on errors; log to console for debugging
+				e.printStackTrace();
+			}
         }
     }
 }
