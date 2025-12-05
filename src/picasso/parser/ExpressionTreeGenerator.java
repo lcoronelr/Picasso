@@ -26,12 +26,6 @@ public class ExpressionTreeGenerator {
 	
 	private Map<String, ExpressionTreeNode> variables = new HashMap<>();
 
-	// TODO: Do these belong here?
-	private static final int CONSTANT = 0;
-	private static final int GROUPING = 1; // parentheses
-	private static final int ADD_OR_SUBTRACT = 2;
-	private static final int MULTIPLY_OR_DIVIDE = 3;
-
 	/**
 	 * Converts the given string into expression tree for easier manipulation.
 	 * 
@@ -161,7 +155,9 @@ public class ExpressionTreeGenerator {
 				 * pop o2 off the stack, onto the output queue;
 				 */
 				while (!operators.isEmpty() && !(operators.peek() instanceof LeftParenToken)
-						&& orderOfOperation(token) <= orderOfOperation(operators.peek())) {
+						&& ((OperationInterface) token).orderOfOperation() <= ((OperationInterface) operators.peek()).orderOfOperation()
+						&& !(((OperationInterface) operators.peek()).orderOfOperation() == 3
+							&& ((OperationInterface) token).orderOfOperation() == 3)) {
 					postfixResult.push(operators.pop());
 				}
 
@@ -227,24 +223,5 @@ public class ExpressionTreeGenerator {
 		// System.out.println(postfixResult);
 		return postfixResult;
 
-	}
-
-	/**
-	 * Returns the order of operation for the given token
-	 * 
-	 * @param token the token whose order of operation is being requested.
-	 * @return the order of operation for the given token
-	 */
-	private int orderOfOperation(Token token) {
-
-		// TODO: Need to finish with other operators.
-
-		// TODO: DISCUSS: Is it better to have a method in the OperatorToken
-		// class that gives the order of operation?
-
-		if (token instanceof PlusToken)
-			return ADD_OR_SUBTRACT;
-		else
-			return CONSTANT;
 	}
 }

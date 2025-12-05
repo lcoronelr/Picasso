@@ -4,15 +4,15 @@ import picasso.parser.language.CharConstants;
 import picasso.parser.tokens.chars.CharToken;
 
 /**
- * Represents the plus sign token
+ * Represents the modulo sign token
  */
-public class PlusToken extends CharToken implements OperationInterface {
-	public PlusToken() {
-		super(CharConstants.PLUS);
+public class ModuloToken extends CharToken implements OperationInterface {
+	public ModuloToken() {
+		super(CharConstants.MOD);
 	}
 
 	@Override
 	public int orderOfOperation(){
-		return 1;
+		return 2;
 	}
 }

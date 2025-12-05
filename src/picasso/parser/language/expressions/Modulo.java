@@ -3,22 +3,20 @@ package picasso.parser.language.expressions;
 import picasso.parser.language.ExpressionTreeNode;
 
 /**
- * Represents the plus operator in the Picasso language.
+ * Represents the modulo operator in the Picasso language.
  * 
- * @author Robert C. Duvall
- * @author Sara Sprenkle
  * @author Asya Yurkovskaya
  * 
  */
-public class Plus extends BinaryOperator {
+public class Modulo extends BinaryOperator {
 
 	/**
-	 * Create a plus expression tree that takes as parameters two given expressions
+	 * Create a Modulo expression tree that takes as parameters two given expressions
 	 * 
 	 * @param left the left expression
 	 * @param right the right expression
 	 */
-	public Plus(ExpressionTreeNode left, ExpressionTreeNode right) {
+	public Modulo(ExpressionTreeNode left, ExpressionTreeNode right) {
 		super(left, right);
 	}
 	/**
@@ -30,9 +28,9 @@ public class Plus extends BinaryOperator {
 	public RGBColor evaluate(double x, double y) {
 		RGBColor left_result = left.evaluate(x, y);
 		RGBColor right_result = right.evaluate(x, y);
-		double red = left_result.getRed() + right_result.getRed();
-		double green = left_result.getGreen() + right_result.getGreen();
-		double blue = left_result.getBlue() + right_result.getBlue();
+		double red = left_result.getRed() % right_result.getRed();
+		double green = left_result.getGreen() % right_result.getGreen();
+		double blue = left_result.getBlue() % right_result.getBlue();
 
 		return new RGBColor(red, green, blue);
 	}

@@ -15,6 +15,12 @@ import picasso.parser.language.expressions.*;
 import picasso.parser.tokens.IdentifierToken;
 import picasso.parser.tokens.Token;
 import picasso.parser.tokens.operations.PlusToken;
+import picasso.parser.tokens.operations.MinusToken;
+import picasso.parser.tokens.operations.DivideToken;
+import picasso.parser.tokens.operations.MultiplyToken;
+import picasso.parser.tokens.operations.ExponentToken;
+import picasso.parser.tokens.operations.ModuloToken;
+
 
 /**
  * Tests of creating an expression tree from a string expression. Will have
