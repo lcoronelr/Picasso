@@ -30,6 +30,8 @@ public class SemanticAnalyzer implements SemanticAnalyzerInterface {
     private static final String OPERATIONS_TOKENS_PACKAGE = PARSER_PACKAGE + "tokens.operations.";
     private static final String TOKENS_PACKAGE_NAME = PARSER_PACKAGE + "tokens.";
     private static final String OPS_FILE = "conf/operations.prop";
+    private static final List<String> NON_UNARY_FUNCTIONS = 
+                                    List.of("ImageClip", "ImageWrap", "PerlinBW", "PerlinColor");
 	
 	
     public void setVariables(Map<String, ExpressionTreeNode> variables) {
@@ -119,12 +121,20 @@ public class SemanticAnalyzer implements SemanticAnalyzerInterface {
     private void createFunctionParserMappings() {
         List<String> functionsList = BuiltinFunctionsReader.getFunctionsList();
 
-		String semanticAnalyzer = PARSER_PACKAGE + "UnaryFunctionAnalyzer";
+		String unarySemanticAnalyzer = PARSER_PACKAGE + "UnaryFunctionAnalyzer";
+
 
         for (String function : functionsList) {
             String functionClass = TokenFactory.capitalize(function);
             String tokenName = TOKENS_PACKAGE_NAME + "functions." + functionClass + "Token";
-            addSemanticAnalyzerMapping(tokenName, semanticAnalyzer);
+
+            if (NON_UNARY_FUNCTIONS.contains(functionClass)) {
+                String semanticAnalyzer = PARSER_PACKAGE + functionClass + "Analyzer";
+                addSemanticAnalyzerMapping(tokenName, semanticAnalyzer);
+            }
+            else{
+                addSemanticAnalyzerMapping(tokenName, unarySemanticAnalyzer);
+            }
         }
     }
 
