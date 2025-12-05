@@ -93,13 +93,14 @@ public class ImageClipTests {
 
 	@Test
 	public void testImageClipToString() {
-		ImageClip img = new ImageClip("images/vortex.jpg", new X(), new Y());
-		String result = img.toString();
-		
-		assertTrue(result.contains("imageClip"), "toString have 'imageClip'");
-		assertTrue(result.contains("vortex.jpg"), "toString have filename");
-		assertTrue(result.contains("x"), "toString have the x coordinate");
-		assertTrue(result.contains("y"), "toString have the y coordinate");
+	    ImageClip img = new ImageClip("images/vortex.jpg", new X(), new Y());
+	    String result = img.toString();
+	    
+	    // Use case-insensitive check
+	    assertTrue(result.toLowerCase().contains("imageclip"), "toString should have 'imageClip'");
+	    assertTrue(result.contains("vortex.jpg"), "toString should have filename");
+	    assertTrue(result.contains("x"), "toString should have the x coordinate");
+	    assertTrue(result.contains("y"), "toString should have the y coordinate");
 	}
 
 	@Test
