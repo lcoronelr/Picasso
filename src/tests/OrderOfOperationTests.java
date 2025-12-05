@@ -24,7 +24,7 @@ import picasso.parser.tokens.operations.MultiplyToken;
  * @author Asya Yurkovskaya
  */
 
-public class MultiplyTests {
+public class OrderOfOperationTests {
 	
 	private static ExpressionTreeGenerator parser;
 	private Tokenizer tokenizer;
