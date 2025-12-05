@@ -22,7 +22,6 @@ import picasso.util.ErrorReporter;
  */
 public class Evaluator implements Command<Pixmap> {
 	
-	// Made it final so assignments are remembered
 	private final ExpressionTreeGenerator expTreeGen = new ExpressionTreeGenerator();
 	
 	public static final double DOMAIN_MIN = -1;
@@ -52,15 +51,12 @@ public class Evaluator implements Command<Pixmap> {
 	 */
 	public void execute(Pixmap target) {
 		try {
-			// Clear any previous errors
 			if (errorReporter != null) {
 				errorReporter.clearError();
 			}
 			
-			// Create the expression to evaluate just once
 			ExpressionTreeNode expr = createExpression();
 			
-			// Evaluate it for each pixel
 			Dimension size = target.getSize();
 			for (int imageY = 0; imageY < size.height; imageY++) {
 				double evalY = imageToDomainScale(imageY, size.height);
@@ -71,7 +67,6 @@ public class Evaluator implements Command<Pixmap> {
 				}
 			}
 		} catch (ParseException e) {
-			// Make error messages more specific based on the exception message
 			String msg = e.getMessage();
 			if (msg != null) {
 				msg = msg.toLowerCase();
@@ -94,7 +89,6 @@ public class Evaluator implements Command<Pixmap> {
 		} catch (NullPointerException e) {
 			reportError("Please enter an expression.");
 		} catch (Exception e) {
-			// Log the actual error for debugging
 			System.err.println("Unexpected error during evaluation: " + e.getMessage());
 			e.printStackTrace();
 			reportError("Unable to evaluate expression. Please try a different one.");
@@ -108,7 +102,6 @@ public class Evaluator implements Command<Pixmap> {
 		if (errorReporter != null) {
 			errorReporter.reportError(message);
 		} else {
-			// Fallback if no error reporter (for tests or old code)
 			System.err.println("Error: " + message);
 		}
 	}
@@ -128,12 +121,10 @@ public class Evaluator implements Command<Pixmap> {
 	private ExpressionTreeNode createExpression() {
 		String expressionText = expressionField.getText();
 		
-		// Check for empty expression
 		if (expressionText == null || expressionText.trim().isEmpty()) {
 			throw new NullPointerException("Empty expression");
 		}
 		
-		// Let exceptions bubble up to execute()
 		return expTreeGen.makeExpression(expressionText);
 	}
 }

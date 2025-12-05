@@ -23,7 +23,7 @@ public class GUIErrorReporter implements ErrorReporter {
 		statusPanel.add(errorLabel);
 
 		parentPanel.add(statusPanel, "South");
-		this.parentFrame = null; // Explicitly set to null
+		this.parentFrame = null;
 	}
 
 	public GUIErrorReporter(Label statusLabel) {
@@ -42,11 +42,9 @@ public class GUIErrorReporter implements ErrorReporter {
 
 	@Override
 	public void reportError(String message) {
-		// Update the status label
 		errorLabel.setText("Error: " + message);
 		errorLabel.setVisible(true);
 
-		// Only show dialog if parentFrame is available
 		if (parentFrame != null) {
 			showErrorDialog(message);
 		}
@@ -61,7 +59,7 @@ public class GUIErrorReporter implements ErrorReporter {
 	}
 
 	private void showErrorDialog(String message) {
-		Dialog dialog = new Dialog(parentFrame, "Error", true); // true = modal
+		Dialog dialog = new Dialog(parentFrame, "Error", true);
 		dialog.setLayout(new BorderLayout());
 
 		Label messageLabel = new Label(message);
