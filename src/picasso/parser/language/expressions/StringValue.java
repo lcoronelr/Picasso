@@ -17,7 +17,7 @@ public class StringValue extends ExpressionTreeNode {
 		this.value = value;
 		
 		// Load the image when string is created
-		this.image = new Pixmap(value);
+			this.image = new Pixmap(value);
 		
 	}
 	
@@ -27,6 +27,7 @@ public class StringValue extends ExpressionTreeNode {
 	
 	@Override
 	public RGBColor evaluate(double x, double y) {
+		// Map domain coordinates [-1,1] to image coordinates
 		int imageWidth = image.getSize().width;
 		int imageHeight = image.getSize().height;
 		

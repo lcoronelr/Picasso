@@ -4,8 +4,8 @@ import java.util.Stack;
 
 import picasso.parser.language.ExpressionTreeNode;
 import picasso.parser.language.expressions.ImageClip;
-import picasso.parser.language.expressions.StringValue;
 import picasso.parser.tokens.Token;
+import picasso.parser.tokens.StringToken;
 
 /**
  * Handles parsing the ImageClip function
@@ -23,10 +23,8 @@ public class ImageClipAnalyzer implements SemanticAnalyzerInterface {
 		// Get x coordinate expression
 		ExpressionTreeNode xCoord = SemanticAnalyzer.getInstance().generateExpressionTree(tokens);
 		
-		// Get filename now its a StringValue (ExpressionTreeNode)
-		ExpressionTreeNode filenameNode = SemanticAnalyzer.getInstance().generateExpressionTree(tokens);
-		
-		String filename = ((StringValue) filenameNode).getValue();
+		String filename = ((StringToken) tokens.pop()).getValue();
+
 		
 		return new ImageClip(filename, xCoord, yCoord);
 	}
