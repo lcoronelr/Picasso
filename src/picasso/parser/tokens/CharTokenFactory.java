@@ -41,6 +41,6 @@ public class CharTokenFactory {
 		tokenList[CharConstants.SLASH] = new DivideToken();
 		tokenList[CharConstants.CARET] = new ExponentToken();
 		tokenList[CharConstants.MOD] = new ModuloToken();
-		tokenList[CharConstants.EQUAL] = new EqualsToken();
+		tokenList[CharConstants.EQUAL] = new EqualToken();
 	}
 }
