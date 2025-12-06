@@ -14,6 +14,7 @@ import picasso.parser.tokens.Token;
  * Handle an identifier token 
  * 
  * @author Sara Sprenkle
+ * @author Therese Elvira Mombou Gatsing
  *
  */
 public class IdentifierAnalyzer implements SemanticAnalyzerInterface {
@@ -36,16 +37,11 @@ public class IdentifierAnalyzer implements SemanticAnalyzerInterface {
 			return mapped;
 		}
 
-	    Map<String, ExpressionTreeNode> vars = SemanticAnalyzer.getInstance().getVariables();
-	    if (vars != null) {
-	        mapped = vars.get(id);
-	        if (mapped != null) {
-	            return mapped;
-	        }
+	    SemanticAnalyzer sem = SemanticAnalyzer.getInstance();
+	    if (sem.isVariableDefined(id)) {
+	    	return sem.getVariable(id);
 	    }
 		
-		
-		// TODO : What should we do if we don't recognize the identifier?
-		// Is that an error? Or, could there a valid reason?
-	    throw new ParseException("'" + id + "' is not a defined variable or image");	}
+	    throw new ParseException("'" + id + "' is not a defined variable or image");
+	}
 }
