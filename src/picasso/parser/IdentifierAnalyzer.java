@@ -47,5 +47,5 @@ public class IdentifierAnalyzer implements SemanticAnalyzerInterface {
 		
 		// TODO : What should we do if we don't recognize the identifier?
 		// Is that an error? Or, could there a valid reason?
-	    throw new ParseException("Undefined identifier: '" + id + "'");	}
+	    throw new ParseException("'" + id + "' is not a defined variable or image");	}
 }

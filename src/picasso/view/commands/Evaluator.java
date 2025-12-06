@@ -54,9 +54,9 @@ public class Evaluator implements Command<Pixmap> {
 			if (errorReporter != null) {
 				errorReporter.clearError();
 			}
-			
+
 			ExpressionTreeNode expr = createExpression();
-			
+
 			Dimension size = target.getSize();
 			for (int imageY = 0; imageY < size.height; imageY++) {
 				double evalY = imageToDomainScale(imageY, size.height);
@@ -67,32 +67,47 @@ public class Evaluator implements Command<Pixmap> {
 				}
 			}
 		} catch (ParseException e) {
-			String msg = e.getMessage();
-			if (msg != null) {
-				msg = msg.toLowerCase();
-				if (msg.contains("unrecognized character") || msg.contains("no match")) {
-					reportError("Invalid character in expression. Only use letters, numbers, and valid operators (+, -, *, /).");
-				} else if (msg.contains("mismatched parenthes") || msg.contains("missing (")) {
-					reportError("Mismatched parentheses. Make sure every '(' has a matching ')'.");
-				} else if (msg.contains("extra operands")) {
-					reportError("Too many values without operators. Check your expression structure.");
-				} else if (msg.contains("not enough") || msg.contains("expected")) {
-					reportError("Missing operand or argument. Check that functions have the right number of inputs.");
-				} else {
-					reportError("Cannot understand expression. Please check your syntax.");
-				}
-			} else {
-				reportError("Cannot understand expression. Please check your syntax.");
-			}
+		    e.printStackTrace();
+		    String msg = e.getMessage();
+		    if (msg != null && !msg.trim().isEmpty()) {
+		        msg = cleanErrorMessage(msg);
+		        reportError(msg);
+		    } else {
+		        reportError("Invalid expression syntax. Please check your input.");
+		    }
 		} catch (ArithmeticException e) {
-			reportError("Math error: division by zero or invalid calculation.");
+		    e.printStackTrace();
+		    reportError("Math error: division by zero or invalid calculation.");
 		} catch (NullPointerException e) {
-			reportError("Please enter an expression.");
+		    e.printStackTrace();
+		    String expressionText = expressionField.getText();
+		    if (expressionText != null && !expressionText.trim().isEmpty()) {
+		        reportError("Invalid expression. The input contains characters that cannot be processed.");
+		    } else {
+		        reportError("Please enter an expression.");
+		    }
 		} catch (Exception e) {
-			System.err.println("Unexpected error during evaluation: " + e.getMessage());
-			e.printStackTrace();
-			reportError("Unable to evaluate expression. Please try a different one.");
+		    System.err.println("Unexpected error during evaluation: " + e.getMessage());
+		    e.printStackTrace();
+		    reportError("Unable to evaluate expression. Please try a different one.");
 		}
+	}
+	
+	/**
+	 * Cleans up error messages to be more user-friendly
+	 */
+	private String cleanErrorMessage(String msg) {
+		msg = msg.replaceAll("(?i)ParseException:\\s*", "");
+		msg = msg.replaceAll("java\\.lang\\.\\w+:\\s*", "");
+		msg = msg.replaceAll("line \\d+:\\d+\\s*", "");
+		msg = msg.replace("at input", "with");
+		msg = msg.trim();
+		
+		if (!msg.isEmpty()) {
+			msg = Character.toUpperCase(msg.charAt(0)) + msg.substring(1);
+		}
+		
+		return msg;
 	}
 	
 	/**
@@ -118,12 +133,19 @@ public class Evaluator implements Command<Pixmap> {
 	 * Create expression tree from text field.
 	 */
 	private ExpressionTreeNode createExpression() {
-		String expressionText = expressionField.getText();
-		
-		if (expressionText == null || expressionText.trim().isEmpty()) {
-			throw new NullPointerException("Empty expression");
-		}
-		
-		return expTreeGen.makeExpression(expressionText);
+	    String expressionText = expressionField.getText();
+	    
+	    if (expressionText == null || expressionText.trim().isEmpty()) {
+	        throw new NullPointerException("Empty expression");
+	    }
+	    /*
+	    String invalidChars = "&@#$%^!~`|\\[\\]{}";
+	    for (char c : expressionText.toCharArray()) {
+	        if (invalidChars.indexOf(c) != -1) {
+	            throw new ParseException("Invalid character '" + c + "' in expression. Only use letters, numbers, and valid operators.");
+	        }
+	    } */
+	    
+	    return expTreeGen.makeExpression(expressionText);
 	}
 }

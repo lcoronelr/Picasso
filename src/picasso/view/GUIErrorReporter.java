@@ -77,7 +77,7 @@ public class GUIErrorReporter implements ErrorReporter {
 		buttonPanel.add(okButton);
 		dialog.add(buttonPanel, BorderLayout.SOUTH);
 
-		dialog.setSize(510, 140);
+		dialog.setSize(675, 140);
 		dialog.setLocationRelativeTo(parentFrame);
 		dialog.setVisible(true);
 	}

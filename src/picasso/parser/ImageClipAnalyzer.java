@@ -14,20 +14,28 @@ import picasso.parser.tokens.StringToken;
  */
 public class ImageClipAnalyzer implements SemanticAnalyzerInterface {
 
-	@Override
-	public ExpressionTreeNode generateExpressionTree(Stack<Token> tokens) {
-		tokens.pop();
-		// Get y coordinate expression (top of stack after function)
-		ExpressionTreeNode yCoord = SemanticAnalyzer.getInstance().generateExpressionTree(tokens);
-		
-		// Get x coordinate expression
-		ExpressionTreeNode xCoord = SemanticAnalyzer.getInstance().generateExpressionTree(tokens);
-		
-		String filename = ((StringToken) tokens.pop()).getValue();
-
-		
-		return new ImageClip(filename, xCoord, yCoord);
-	}
+    @Override
+    public ExpressionTreeNode generateExpressionTree(Stack<Token> tokens) {
+        tokens.pop();
+        
+        ExpressionTreeNode yCoord = SemanticAnalyzer.getInstance().generateExpressionTree(tokens);
+        
+        if (tokens.isEmpty()) {
+            throw new ParseException("imageClip requires 3 arguments but only received 1. Required: filename (string), x coordinate, and y coordinate");
+        }
+        
+        ExpressionTreeNode xCoord = SemanticAnalyzer.getInstance().generateExpressionTree(tokens);
+        
+        if (tokens.isEmpty()) {
+            throw new ParseException("imageClip requires 3 arguments but only received 2. Required: filename (string), x coordinate, and y coordinate");
+        }
+        
+        Token filenameToken = tokens.pop();
+        if (!(filenameToken instanceof StringToken)) {
+            throw new ParseException("imageClip requires 3 arguments: filename (string), x coordinate, and y coordinate");
+        }
+        
+        String filename = ((StringToken) filenameToken).getValue();
+        return new ImageClip(filename, xCoord, yCoord);
+    }
 }
-
-
