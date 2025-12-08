@@ -116,14 +116,14 @@ public class Evaluator implements Command<Pixmap> {
 	
 	/**
 	 * Create expression tree from text field.
-	 */
-	private ExpressionTreeNode createExpression() {
-		String expressionText = expressionField.getText();
-		
-		if (expressionText == null || expressionText.trim().isEmpty()) {
-			throw new NullPointerException("Empty expression");
+		 */
+		private ExpressionTreeNode createExpression() {
+			String expressionText = expressionField.getText();
+			
+			if (expressionText == null || expressionText.trim().isEmpty()) {
+				throw new NullPointerException("Empty expression");
+			}
+			
+			return expTreeGen.makeExpression(expressionText);
 		}
-		
-		return expTreeGen.makeExpression(expressionText);
 	}
-}

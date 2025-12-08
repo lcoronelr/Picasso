@@ -16,8 +16,7 @@ import picasso.util.ThreadedCommand;
 
 /**
  * Opens either an image or expression file. Images are read into the pixmap;
- * expression files populate the input field (ignoring // comments) and trigger
- * evaluation.
+ * expression files populate the input field and are evaluated. 
  * 
  * @author Robert C Duvall
  */
@@ -90,13 +89,13 @@ public class Reader extends FileCommand<Pixmap> {
 		StringBuilder builder = new StringBuilder();
 		for (String line : lines) {
 			int commentStart = line.indexOf("//");
-			String withoutComment = (commentStart >= 0) ? line.substring(0, commentStart) : line;
+			String withoutComment = commentStart >= 0 ? line.substring(0, commentStart) : line;
 			String trimmed = withoutComment.trim();
 			if (trimmed.isEmpty()) {
-				continue; // skip blank lines and comments
+				continue;
 			}
 			if (builder.length() > 0) {
-				builder.append(' ');
+				builder.append('\n');
 			}
 			builder.append(trimmed);
 		}
