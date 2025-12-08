@@ -11,17 +11,27 @@ import picasso.parser.language.ExpressionTreeNode;
  */
 public class T extends ExpressionTreeNode {
 
-    private static double tTime = -0.01;
+    private static double tTime = 0;
 
 	/**
 	 * //FIXME
 	 */
 	@Override
 	public RGBColor evaluate(double x, double y) {
-        System.out.println(tTime);
-        tTime += 0.01;
 		return new RGBColor(tTime, tTime, tTime);
 	}
+
+    public void increaseTime() {
+        tTime += 0.04;
+    }
+
+    public double getTime() {
+        return tTime;
+    }
+
+    public void resetTime() {
+        tTime = 0;
+    }
 
 	/*
 	 * (non-Javadoc)
