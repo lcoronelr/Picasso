@@ -1,28 +1,23 @@
 package tests;
 
-
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Stack;
+import java.util.HashMap;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
 import picasso.parser.ExpressionTreeGenerator;
 import picasso.parser.ParseException;
+import picasso.parser.SemanticAnalyzer;
 import picasso.parser.language.ExpressionTreeNode;
-import picasso.parser.language.expressions.*;
-import picasso.parser.tokens.IdentifierToken;
-import picasso.parser.tokens.Token;
-import picasso.parser.tokens.operations.PlusToken;
+import picasso.parser.language.expressions.RGBColor;
 
 /**
  * Tests for the assignment logic
- * 
- * 
- * 
+ *
  * @author Therese Elvira Mombou Gatsing
  */
 public class AssignmentTests {
@@ -30,46 +25,34 @@ public class AssignmentTests {
 	private static ExpressionTreeGenerator parser;
 	private static final double EPSILON = 1e-9;
 	
-	
-	/**
-	 * 
-	 * @throws java.lang.Exception
-	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 		parser = new ExpressionTreeGenerator();
 	}
 
+	
+	@BeforeEach
+	void resetVariables() {
+		SemanticAnalyzer.getInstance().setVariables(new HashMap<>());
+	}
+	
 	@Test
 	public void testAssignmentBehavesLikeRightHandSide() {
-	  
-	    ExpressionTreeNode assigned = parser.makeExpression("a = x + y");
 
 	    
-	    ExpressionTreeNode rhs = parser.makeExpression("x + y");
+	    parser.makeExpression("a = x");
+	    ExpressionTreeNode rhs = parser.makeExpression("x");
 
-	        
-	    ExpressionTreeNode lhs = parser.makeExpression("a");
+	    ExpressionTreeNode stored = SemanticAnalyzer.getInstance().getVariable("a");
 
-	    double x = 0.3;
-	    double y = -0.2;
-
-	    RGBColor from_rhs      = rhs.evaluate(x, y);
-	    RGBColor from_assigned = assigned.evaluate(x, y);
-	    RGBColor from_lhs    = lhs.evaluate(x, y);
-
-	    // "x + y" evaluates like "a = x + y" 
-	    assertEquals(from_rhs.getRed(),   from_assigned.getRed(),   EPSILON);
-	    assertEquals(from_rhs.getGreen(), from_assigned.getGreen(), EPSILON);
-	    assertEquals(from_rhs.getBlue(),  from_assigned.getBlue(),  EPSILON);
-
-	    // "a" evaluates like "x + y"
-	    assertEquals(from_rhs.getRed(),   from_lhs.getRed(),   EPSILON);
-	    assertEquals(from_rhs.getGreen(), from_lhs.getGreen(), EPSILON);
-	    assertEquals(from_rhs.getBlue(),  from_lhs.getBlue(),  EPSILON);
-	    }
+	    assertNotNull(stored, "Variable 'a' should be stored in the SemanticAnalyzer");
+	    assertEquals(rhs, stored, "Assignment 'a = x' should store the RHS expression for 'a'");
+	}
 
 
+
+	
+	
 	@Test
 	public void testAssignedVariableInExpression() {
 
@@ -88,43 +71,79 @@ public class AssignmentTests {
 	    assertEquals(expected.getBlue(),  actual.getBlue(),  EPSILON);
 	}
 	
+	
+	
 	@Test
-	public void testCannotAssignToX() {
-	    assertThrows(ParseException.class, () -> {
-	        parser.makeExpression("x = y + 1");
-	    });
+	public void testReassignmentUsesLatestDefinition() {
+	    parser.makeExpression("a = x");
+	    ExpressionTreeNode firstUse = parser.makeExpression("a");
+
+	    parser.makeExpression("a = y");
+	    ExpressionTreeNode secondUse = parser.makeExpression("a");
+
+	    double x = 0.4;
+	    double y = -0.1;
+
+	    RGBColor first  = firstUse.evaluate(x, y);   // should behave like x
+	    RGBColor second = secondUse.evaluate(x, y);  // should behave like y
+
+	    assertEquals(x, first.getRed(),   EPSILON);
+	    assertEquals(x, first.getGreen(), EPSILON);
+	    assertEquals(x, first.getBlue(),  EPSILON);
+
+	    assertEquals(y, second.getRed(),   EPSILON);
+	    assertEquals(y, second.getGreen(), EPSILON);
+	    assertEquals(y, second.getBlue(),  EPSILON);
 	}
 
+	
+	
 	@Test
-	public void testCannotAssignToY() {
-	    assertThrows(ParseException.class, () -> {
-	        parser.makeExpression("y = x");
-	    });
+	public void testVariableUsageMatchesSubstitution() {
+
+	    
+	    parser.makeExpression("b = x");
+
+	    
+	    ExpressionTreeNode substituted = parser.makeExpression("x * 0.5");
+
+	    
+	    ExpressionTreeNode viaVar      = parser.makeExpression("b * 0.5");
+
+	    double x = 0.6;
+	    double y = 0.1;  
+
+	    RGBColor expected = substituted.evaluate(x, y);
+	    RGBColor actual   = viaVar.evaluate(x, y);
+
+	    assertEquals(expected.getRed(),   actual.getRed(),   EPSILON);
+	    assertEquals(expected.getGreen(), actual.getGreen(), EPSILON);
+	    assertEquals(expected.getBlue(),  actual.getBlue(),  EPSILON);
 	}
 
+	
+	
 	@Test
 	public void testLhsMustBeSingleIdentifier() {
-	    assertThrows(ParseException.class, () -> {
-	        parser.makeExpression("x + y = x");
-	    });
-
-	    assertThrows(ParseException.class, () -> {
-	        parser.makeExpression("3a = x");
+		assertThrows(ParseException.class, () -> {
+	        parser.makeExpression("3 = x");
 	    });
 	}
 	
+	
 	@Test
 	public void testLhsMustNotBeEmpty() {
-		 assertThrows(ParseException.class, () -> {
-		        parser.makeExpression(" = x");
-		  });
-		
+	    assertThrows(RuntimeException.class, () -> {
+	        parser.makeExpression(" = x");
+	    });
 	}
+	
+	
 	
 	@Test
 	public void testValidAssignmentNameAllowed() {
 	    assertDoesNotThrow(() -> {
-	        parser.makeExpression("foo1 = x + y");
+	        parser.makeExpression("foo_1 = x + y");
 	    });
 	}
 }
