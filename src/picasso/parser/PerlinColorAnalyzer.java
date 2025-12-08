@@ -17,7 +17,7 @@ public class PerlinColorAnalyzer implements SemanticAnalyzerInterface {
     public ExpressionTreeNode generateExpressionTree(Stack<Token> tokens) {
         tokens.pop(); // Remove the function token
         
-        // agianm, the reverse order
+        // again, the reverse order
 
         ExpressionTreeNode yExpr = SemanticAnalyzer.getInstance().generateExpressionTree(tokens);
         

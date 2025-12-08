@@ -43,8 +43,7 @@ public class ImageClip extends ExpressionTreeNode {
 		// Clamp to [-1, 1]
 		xVal = Math.max(-1.0, Math.min(1.0, xVal));
 		yVal = Math.max(-1.0, Math.min(1.0, yVal));
-
-		// Convert to [-1,1]
+		
 		int imageWidth = image.getSize().width;
 		int imageHeight = image.getSize().height;
 
