@@ -104,7 +104,12 @@ public class SemanticAnalyzer implements SemanticAnalyzerInterface {
         // String mapping
         tokenName = TOKENS_PACKAGE_NAME + "StringToken";
         parserName = PARSER_PACKAGE + "StringAnalyzer";
-        addSemanticAnalyzerMapping(tokenName, parserName); 
+        addSemanticAnalyzerMapping(tokenName, parserName);
+      
+      	addSemanticAnalyzerMapping(
+			        "picasso.parser.tokens.operations.NegateToken",
+			        "picasso.parser.NegateAnalyzer"
+			    );
 
         // TODO: Are there any others that should be added?
         // Is there a better way to create this mapping?
