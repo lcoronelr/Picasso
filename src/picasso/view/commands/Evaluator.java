@@ -20,6 +20,7 @@ import picasso.parser.language.expressions.T;
  * @author Luis Coronel
  * @author Therese Elvira Mombou Gatsing
  * @author Menilik Deneke
+ * @author Asya Yurkovskaya
  */
 public class Evaluator implements Command<Pixmap> {
 	
