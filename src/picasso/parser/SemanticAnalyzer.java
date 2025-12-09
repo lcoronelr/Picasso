@@ -32,7 +32,7 @@ public class SemanticAnalyzer implements SemanticAnalyzerInterface {
     private static final String TOKENS_PACKAGE_NAME = PARSER_PACKAGE + "tokens.";
     private static final String OPS_FILE = "conf/operations.prop";
     private static final List<String> NON_UNARY_FUNCTIONS = 
-                                    List.of("ImageClip", "ImageWrap", "PerlinBW", "PerlinColor");
+                                    List.of("ImageClip", "ImageWrap", "PerlinBW", "PerlinColor", "RandomFunction");
 	
 
 
@@ -104,7 +104,12 @@ public class SemanticAnalyzer implements SemanticAnalyzerInterface {
         // String mapping
         tokenName = TOKENS_PACKAGE_NAME + "StringToken";
         parserName = PARSER_PACKAGE + "StringAnalyzer";
-        addSemanticAnalyzerMapping(tokenName, parserName); 
+        addSemanticAnalyzerMapping(tokenName, parserName);
+      
+      	addSemanticAnalyzerMapping(
+			        "picasso.parser.tokens.operations.NegateToken",
+			        "picasso.parser.NegateAnalyzer"
+			    );
 
         // TODO: Are there any others that should be added?
         // Is there a better way to create this mapping?
