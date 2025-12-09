@@ -1,10 +1,12 @@
 package tests;
 
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -146,4 +148,73 @@ public class AssignmentTests {
 	        parser.makeExpression("foo_1 = x + y");
 	    });
 	}
+	
+	@Test
+	public void testMultipleVariablesStored() {
+		SemanticAnalyzer analyzer = SemanticAnalyzer.getInstance();
+
+		parser.makeExpression("a = x");
+		parser.makeExpression("b = y");
+		parser.makeExpression("c = x + y");
+
+		Map<String, ExpressionTreeNode> vars = analyzer.getVariables();
+		assertEquals(3, vars.size(), "There should be three variables stored (a, b, c).");
+		assertTrue(vars.containsKey("a"));
+		assertTrue(vars.containsKey("b"));
+		assertTrue(vars.containsKey("c"));
+	}
+	
+	
+	@Test
+	public void testAssignmentUsingPreviouslyDefinedVariable() {
+
+	    parser.makeExpression("base = x + y");
+	    parser.makeExpression("half = base * 0.5");
+
+	    ExpressionTreeNode viaVar   = parser.makeExpression("half");
+	    ExpressionTreeNode direct   = parser.makeExpression("(x + y) * 0.5");
+
+	    double x = -0.3;
+	    double y = 0.8;
+
+	    RGBColor expected = direct.evaluate(x, y);
+	    RGBColor actual   = viaVar.evaluate(x, y);
+
+	    assertEquals(expected.getRed(),   actual.getRed(),   EPSILON);
+	    assertEquals(expected.getGreen(), actual.getGreen(), EPSILON);
+	    assertEquals(expected.getBlue(),  actual.getBlue(),  EPSILON);
+	}
+	
+	@Test
+	public void testAssignmentWithWhitespace() {
+
+	    parser.makeExpression("   foo   =    x + 1   ");
+	    ExpressionTreeNode viaVar = parser.makeExpression("foo");
+	    ExpressionTreeNode direct = parser.makeExpression("x + 1");
+
+	    double x = 0.25;
+	    double y = 0.0;
+
+	    RGBColor expected = direct.evaluate(x, y);
+	    RGBColor actual   = viaVar.evaluate(x, y);
+
+	    assertEquals(expected.getRed(),   actual.getRed(),   EPSILON);
+	    assertEquals(expected.getGreen(), actual.getGreen(), EPSILON);
+	    assertEquals(expected.getBlue(),  actual.getBlue(),  EPSILON);
+	}
+	
+	@Test
+	public void testVariablesClearedBetweenUses() {
+
+		parser.makeExpression("a = x");
+		assertNotNull(SemanticAnalyzer.getInstance().getVariable("a"));
+
+		//clears
+		SemanticAnalyzer.getInstance().setVariables(new HashMap<>());
+
+		assertNull(SemanticAnalyzer.getInstance().getVariable("a"),
+				"Variable 'a' should not exist after resetting variables.");
+	}
+	
+	
 }
