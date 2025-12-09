@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Stack;
 
 import picasso.parser.language.ExpressionTreeNode;
+import picasso.parser.language.expressions.T;
 import picasso.parser.tokens.*;
 import picasso.parser.tokens.chars.*;
 import picasso.parser.tokens.functions.*;
@@ -87,8 +88,12 @@ public class ExpressionTreeGenerator {
 				postfixResult.push(token);
 			} else if (token instanceof ColorToken) {
 				postfixResult.push(token);
-			} else if (token instanceof IdentifierToken) {
+			} else if (token instanceof IdentifierToken idTok) {
 				postfixResult.push(token);
+				String indentifierTokenName = idTok.getName();
+				if (indentifierTokenName.equals("t")) {
+					T.setHasTime(true);
+				}
 			} else if (token instanceof StringToken) { // adds the string token.
 				postfixResult.push(token);
 			} else if (token instanceof FunctionToken) {

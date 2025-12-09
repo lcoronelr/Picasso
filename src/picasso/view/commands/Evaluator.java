@@ -10,6 +10,7 @@ import picasso.parser.ParseException;
 import picasso.parser.language.ExpressionTreeNode;
 import picasso.util.Command;
 import picasso.util.ErrorReporter;
+import picasso.parser.language.expressions.T;
 
 /**
  * Evaluate an expression for each pixel in a image.
@@ -57,14 +58,26 @@ public class Evaluator implements Command<Pixmap> {
 
 			ExpressionTreeNode expr = createExpression();
 
+			int frames = 1;
+
+			if (T.getHasTime()) {
+				frames = 25;
+			}
+
 			Dimension size = target.getSize();
-			for (int imageY = 0; imageY < size.height; imageY++) {
-				double evalY = imageToDomainScale(imageY, size.height);
-				for (int imageX = 0; imageX < size.width; imageX++) {
-					double evalX = imageToDomainScale(imageX, size.width);
-					Color pixelColor = expr.evaluate(evalX, evalY).toJavaColor();
-					target.setColor(imageX, imageY, pixelColor);
+
+			for (int i = 0; i < frames; i++) {
+				
+				for (int imageY = 0; imageY < size.height; imageY++) {
+					double evalY = imageToDomainScale(imageY, size.height);
+					for (int imageX = 0; imageX < size.width; imageX++) {
+						double evalX = imageToDomainScale(imageX, size.width);
+						Color pixelColor = expr.evaluate(evalX, evalY).toJavaColor();
+						target.setColor(imageX, imageY, pixelColor);
+					}
 				}
+
+				T.increaseTime();
 			}
 		} catch (ParseException e) {
 		    e.printStackTrace();
@@ -90,6 +103,10 @@ public class Evaluator implements Command<Pixmap> {
 		    System.err.println("Unexpected error during evaluation: " + e.getMessage());
 		    e.printStackTrace();
 		    reportError("Unable to evaluate expression. Please try a different one.");
+
+		} finally {
+			T.resetTime();
+			T.setHasTime(false);
 		}
 	}
 	
@@ -138,13 +155,6 @@ public class Evaluator implements Command<Pixmap> {
 	    if (expressionText == null || expressionText.trim().isEmpty()) {
 	        throw new NullPointerException("Empty expression");
 	    }
-	    /*
-	    String invalidChars = "&@#$%^!~`|\\[\\]{}";
-	    for (char c : expressionText.toCharArray()) {
-	        if (invalidChars.indexOf(c) != -1) {
-	            throw new ParseException("Invalid character '" + c + "' in expression. Only use letters, numbers, and valid operators.");
-	        }
-	    } */
 	    
 	    return expTreeGen.makeExpression(expressionText);
 	}

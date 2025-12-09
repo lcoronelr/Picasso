@@ -12,6 +12,7 @@ import picasso.parser.language.ExpressionTreeNode;
 public class T extends ExpressionTreeNode {
 
     private static double tTime = 0;
+    private static boolean hasTime = false;
 
 	/**
 	 * //FIXME
@@ -21,16 +22,20 @@ public class T extends ExpressionTreeNode {
 		return new RGBColor(tTime, tTime, tTime);
 	}
 
-    public void increaseTime() {
+    public static void increaseTime() {
         tTime += 0.04;
     }
 
-    public double getTime() {
-        return tTime;
+    public static void resetTime() {
+        tTime = 0;
     }
 
-    public void resetTime() {
-        tTime = 0;
+    public static void setHasTime(boolean timeBoolean) {
+        hasTime = timeBoolean;
+    }
+
+    public static boolean getHasTime() {
+        return hasTime;
     }
 
 	/*
