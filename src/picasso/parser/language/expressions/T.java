@@ -23,7 +23,7 @@ public class T extends ExpressionTreeNode {
 	}
 
     public static void increaseTime() {
-        tTime += 0.04;
+        tTime += 0.02;
     }
 
     public static void resetTime() {

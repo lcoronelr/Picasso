@@ -62,7 +62,7 @@ public class Evaluator implements Command<Pixmap> {
 			int frames = 1;
 
 			if (T.getHasTime()) {
-				frames = 25;
+				frames = 50;
 			}
 
 			Dimension size = target.getSize();
