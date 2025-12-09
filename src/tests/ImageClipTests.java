@@ -27,6 +27,7 @@ import picasso.parser.tokens.functions.ImageClipToken;
  * Tests for the imageClip function.
  * 
  * @author Luis Coronel
+ * @author Therese Elvira Mombou Gatsing
  */
 public class ImageClipTests {
 
