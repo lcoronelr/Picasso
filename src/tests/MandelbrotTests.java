@@ -84,8 +84,8 @@ public class MandelbrotTests {
 	}
 	
 	@Test
-	public void testMandelbrotMath() {
-	    Mandelbrot mandelbrot = new Mandelbrot(new Constant(0), new Constant(0));
+	public void testInteriorPointsAreBlack() {
+		Mandelbrot mandelbrot = new Mandelbrot(new Constant(0), new Constant(0));
 	    
 	    double[][] interiorPoints = {
 	        {0, 0}, 
@@ -104,56 +104,102 @@ public class MandelbrotTests {
 	        assertEquals(color.getRed(), color.getGreen(), EPSILON);
 	        assertEquals(color.getRed(), color.getBlue(), EPSILON);
 	    }
-	    
-	    double[][] exteriorPoints = {
-	        {1, 0},      
-	        {0, 1},      
-	        {0.75, 0},   
-	        {-1, 1}      
-	    };
-	    
-	    for (double[] point : exteriorPoints) {
-	        double x = point[0];
-	        double y = point[1];
-	        RGBColor color = mandelbrot.evaluate(x, y);
-	        
-	        assertTrue(color.getRed() > -1.0,
-	            "Point (" + x + "," + y + ") should be outside. Got: " + color.getRed());
-	        // Verify in range [-1, 1]
-	        assertTrue(color.getRed() <= 1.0,
-	            "Color should be ≤ 1.0 at (" + x + "," + y + ")");
-	    }
-	    
-	    double[][] boundaryPoints = {
-	        {0.25, 0.5},   
-	        {-0.75, 0.1},  
-	        {-0.5, 0.75},  
-	        {0.1, 0.6}    
-	    };
-	    
-	    for (double[] point : boundaryPoints) {
-	        double x = point[0];
-	        double y = point[1];
-	        RGBColor color = mandelbrot.evaluate(x, y);
-	        
-	        assertTrue(color.getRed() > -1.0 && color.getRed() < 0.0,
-	            "Point (" + x + "," + y + ") should be boundary (dark gray). Got: " + color.getRed());
-	    }
-	    
-	   
-	    
-	    // Points with largest magnitude in [-1,1]: (1,1) and (-1,-1)
-	    RGBColor fast1 = mandelbrot.evaluate(1, 1);      // |c| = √2 ≈ 1.414
-	    RGBColor fast2 = mandelbrot.evaluate(-1, -1);    // |c| = √2 ≈ 1.414
-	   
-	    
-	    // Test that (0.5, 0.5) escapes faster than (0.25, 0.25) since |c| is greater for (0.25, 0.25)
+	}
+
+	@Test  
+	public void testExteriorPointsAreNotBlack() {
+		Mandelbrot mandelbrot = new Mandelbrot(new Constant(0), new Constant(0));
+
+		double[][] exteriorPoints = {
+		        {1, 0},      
+		        {0, 1},      
+		        {0.75, 0},   
+		        {-1, 1}      
+		    };
+		    
+		    for (double[] point : exteriorPoints) {
+		        double x = point[0];
+		        double y = point[1];
+		        RGBColor color = mandelbrot.evaluate(x, y);
+		        
+		        assertTrue(color.getRed() > -1.0,
+		            "Point (" + x + "," + y + ") should be outside. Got: " + color.getRed());
+		        // Verify in range [-1, 1]
+		        assertTrue(color.getRed() <= 1.0,
+		            "Color should be ≤ 1.0 at (" + x + "," + y + ")");
+		    }
+	}
+
+	@Test
+	public void testBoundaryPointsAreDarkGray() {
+		Mandelbrot mandelbrot = new Mandelbrot(new Constant(0), new Constant(0));
+
+		double[][] boundaryPoints = {
+		        {0.25, 0.5},   
+		        {-0.75, 0.1},  
+		        {-0.5, 0.75},  
+		        {0.1, 0.6}    
+		    };
+		    
+		    for (double[] point : boundaryPoints) {
+		        double x = point[0];
+		        double y = point[1];
+		        RGBColor color = mandelbrot.evaluate(x, y);
+		        
+		        assertTrue(color.getRed() > -1.0 && color.getRed() < 0.0,
+		            "Point (" + x + "," + y + ") should be boundary (dark gray). Got: " + color.getRed());
+		    }
+	}
+
+	@Test
+	public void testEscapeDetection() {    
+		Mandelbrot mandelbrot = new Mandelbrot(new Constant(0), new Constant(0));
+
 	    RGBColor faster = mandelbrot.evaluate(0.5, 0.5);    
 	    RGBColor slower = mandelbrot.evaluate(0.25, 0.25);
 	    
 	    assertTrue(faster.getRed() > slower.getRed(),
 	        "(0.5,0.5) should be brighter than (0.25,0.25)");
-
+	}
+	
+	@Test
+	public void testMandelbrotColorRange() {
+		Mandelbrot mandelbrot = new Mandelbrot(new X(), new Y());
+	    
+	    for (double x = -1; x <= 1; x += 0.25) {
+	        for (double y = -1; y <= 1; y += 0.25) {
+	            RGBColor color = mandelbrot.evaluate(x, y);
+	            assertTrue(color.getRed() >= -1 && color.getRed() <= 1);
+	            assertTrue(color.getGreen() >= -1 && color.getGreen() <= 1);
+	            assertTrue(color.getBlue() >= -1 && color.getBlue() <= 1);
+	        }
+	    }
+	}
+	
+	/**
+	 * 
+	 */
+	
+	@Test
+	public void testParseMandelbrotErrorHandling() {
+	    // Test that invalid syntax throws appropriate exceptions
+	    assertThrows(Exception.class, () -> {
+	        parser.makeExpression("mandelbrot(x)"); // Missing parameter
+	    });
+	    
+	    assertThrows(Exception.class, () -> {
+	        parser.makeExpression("mandelbrot(x, y, z)"); // Extra parameter
+	    });
+	}
+	
+	@Test
+	public void testMandelbrotToString() {
+	    Mandelbrot m = new Mandelbrot(new X(), new Y());
+	    String str = m.toString();
+	    
+	    assertTrue(str.contains("Mandelbrot"), "Should contain 'Mandelbrot'");
+	    assertTrue(str.contains("x"), "Should contain x parameter");
+	    assertTrue(str.contains("y"), "Should contain y parameter");
 	}
 
 }
