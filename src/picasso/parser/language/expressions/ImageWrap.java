@@ -4,18 +4,18 @@ import picasso.model.Pixmap;
 import picasso.parser.language.ExpressionTreeNode;
 
 /**
- * Represents the ImageClip function - imports an image and clips it
+ * Represents the ImageWrap function - imports an image and wraps it
  *
  * @author Luis Coronel
  */
-public class ImageClip extends ExpressionTreeNode {
+public class ImageWrap extends ExpressionTreeNode {
 
 	private String filename;
 	private ExpressionTreeNode xCoord;
 	private ExpressionTreeNode yCoord;
 	private Pixmap image;
 
-	public ImageClip(String filename, ExpressionTreeNode xCoord, ExpressionTreeNode yCoord) {
+	public ImageWrap(String filename, ExpressionTreeNode xCoord, ExpressionTreeNode yCoord) {
 		this.filename = filename;
 		this.xCoord = xCoord;
 		this.yCoord = yCoord;
@@ -40,10 +40,11 @@ public class ImageClip extends ExpressionTreeNode {
 		double xVal = xResult.getRed();
 		double yVal = yResult.getRed();
 
-		// Clamp to [-1, 1]
-		xVal = Math.max(-1.0, Math.min(1.0, xVal));
-		yVal = Math.max(-1.0, Math.min(1.0, yVal));
-		
+		// wrap
+		xVal = wrapCoordinate(xVal);
+		yVal = wrapCoordinate(yVal);
+
+		// Convert to [-1,1]
 		int imageWidth = image.getSize().width;
 		int imageHeight = image.getSize().height;
 
@@ -61,11 +62,30 @@ public class ImageClip extends ExpressionTreeNode {
 		return new RGBColor(red, green, blue);
 	}
 
+	/**
+	 * 
+	 * @param value the coordinate value to wrap
+	 * @return the wrapped value in range [-1, 1]
+	 */
+	
+	private double wrapCoordinate(double value) {
+		// Shift to [0, 2] range
+		double shifted = value + 1.0;
+		// Use modulo
+		// Handle negatives
+		double wrapped = shifted % 2.0;
+		if (wrapped < 0) {
+			wrapped += 2.0;
+		}
+		// Shift back too [-1, 1]n
+		return wrapped - 1.0;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == this) return true;
-		if (!(obj instanceof ImageClip)) return false;
-		ImageClip other = (ImageClip) obj;
+		if (!(obj instanceof ImageWrap)) return false;
+		ImageWrap other = (ImageWrap) obj;
 		return filename.equals(other.filename) &&
 		       xCoord.equals(other.xCoord) &&
 		       yCoord.equals(other.yCoord);
@@ -73,6 +93,6 @@ public class ImageClip extends ExpressionTreeNode {
 
 	@Override
 	public String toString() {
-		return "ImageClip(\"" + filename + "\", " + xCoord + ", " + yCoord + ")";
+		return "ImageWrap(\"" + filename + "\", " + xCoord + ", " + yCoord + ")";
 	}
 }
