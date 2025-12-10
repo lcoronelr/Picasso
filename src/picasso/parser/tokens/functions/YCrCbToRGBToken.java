@@ -4,13 +4,13 @@ package picasso.parser.tokens.functions;
  * Represents the rgbToYCrCb function token
  * 
  * @author Abhishek Pradhan
- //**
+ *//**
  */
 
-public class RgbToYCrCbToken extends FunctionToken{
+public class YCrCbToRGBToken extends FunctionToken{
 
-	public RgbToYCrCbToken() {
-		super ("RgbToYCrCb Function Token");
+	public YCrCbToRGBToken() {
+		super ("YCrCbToRGB Function Token");
 	}
 
 }

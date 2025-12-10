@@ -1,27 +1,21 @@
 package picasso.parser.tokens.operations;
-
 import picasso.parser.language.CharConstants;
 import picasso.parser.tokens.chars.CharToken;
 
 /**
- * 
+ * Represents the negate token
  * 
  * @author Therese Elvira Mombou Gatsing
  */
-public class EqualToken extends CharToken implements OperationInterface {
+public class NegateToken extends CharToken implements OperationInterface {
 	
-	public EqualToken() {
-		super(CharConstants.EQUAL);
+	public NegateToken() {
+		super(CharConstants.BANG);
 	}
-	
-	@Override
-    public String toString() {
-        return "EqualToken";
-    }
 	
 	@Override
 	public int orderOfOperation(){
-		return 0;
+		return 4;
 	}
-	
+
 }
