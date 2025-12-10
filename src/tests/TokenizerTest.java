@@ -100,9 +100,7 @@ public class TokenizerTest {
 	public void testTokenizeCombinedFunctionExpression() {
 		String expression = "perlinColor(floor(x), y)";
 		tokens = tokenizer.parseTokens(expression);
-		// TODO: Check the tokens...
-		// Will uncomment the following once i have the perlincolor token
-		/**
+		
 		assertEquals(new PerlinColorToken(), tokens.get(0));
 		assertEquals(new LeftParenToken(),    tokens.get(1));
 		assertEquals(new FloorToken(),        tokens.get(2));
@@ -113,12 +111,10 @@ public class TokenizerTest {
 		assertEquals(new IdentifierToken("y"),tokens.get(7));
 		assertEquals(new RightParenToken(),   tokens.get(8));
 		assertEquals(9, tokens.size());
-		*/
+		
 		expression = "sin(perlinColor(x, y))";
 		tokens = tokenizer.parseTokens(expression);
-		// TODO: Check the tokens...
 		
-		/**
 		assertEquals(new SinToken(),          tokens.get(0));
 		assertEquals(new LeftParenToken(),    tokens.get(1));
 		assertEquals(new PerlinColorToken(),  tokens.get(2));
@@ -129,7 +125,7 @@ public class TokenizerTest {
 		assertEquals(new RightParenToken(),   tokens.get(7));
 		assertEquals(new RightParenToken(),   tokens.get(8));
 		assertEquals(9, tokens.size());
-		*/
+		
 	}
 
 	
