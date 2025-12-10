@@ -158,5 +158,5 @@ public class Evaluator implements Command<Pixmap> {
 	    }
 	    
 	    return expTreeGen.makeExpression(expressionText);
-		
+	}
 }
