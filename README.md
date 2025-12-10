@@ -36,6 +36,10 @@ This code base originated as a project in a course at Duke University.  The prof
 ## Extensions
 
 ### Animator
-- Type an expression that includes t in the input field
-Click "Evaluate"
-- The expression will automatically animate, with t varying from 0 to 1
+The **Animator** extension lets you animate any mathematical expression that uses the variable `t`.
+
+**How to use:**
+1. Enter an expression that includes `t` in the input field.  
+   *Example:* `sin(t) * x`
+2. Click **Evaluate** or simply press **Enter**.
+3. The expression will animate automatically for 50 frames, with `t` varying from `0` to `1`.
