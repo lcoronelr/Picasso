@@ -6,15 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
-
 import picasso.model.Pixmap;
 import picasso.parser.language.BuiltinFunctionsReader;
-import picasso.util.FileCommand;
 import picasso.util.ErrorReporter;
+import picasso.util.FileCommand;
 import picasso.view.ExpressionHistory;
 
 /**
@@ -27,8 +25,8 @@ public class RandomExpressionLoader extends FileCommand<Pixmap> {
     private final JComponent view;
     private final JTextField expressionField;
     private final Random rand = new Random();
-    private ErrorReporter errorReporter;
-    private ExpressionHistory history;
+    private final ErrorReporter errorReporter;
+    private final ExpressionHistory history;
 
 
     private static final int MAX_DEPTH = 10;
@@ -46,10 +44,11 @@ public class RandomExpressionLoader extends FileCommand<Pixmap> {
 
     private final List<String> imagePaths = new ArrayList<>();
 
-    public RandomExpressionLoader(JComponent view, JTextField expressionField, ExpressionHistory history) {
+    public RandomExpressionLoader(JComponent view, JTextField expressionField, ErrorReporter errorReporter, ExpressionHistory history) {
         super(JFileChooser.OPEN_DIALOG);
         this.view = view;
         this.expressionField = expressionField;
+        this.errorReporter = errorReporter;
         this.history = history;
         initializeFunctions();
         initializeImageFiles();
@@ -173,26 +172,23 @@ public class RandomExpressionLoader extends FileCommand<Pixmap> {
      * Leaf expression:
      *  - x
      *  - y
-     *  - t
      *  - numeric constant in [-1,1]
      *  - random color literal [r,g,b]
      */
     private String generateLeaf() {
         
-        int choice = rand.nextInt(5);
+        int choice = rand.nextInt(4);
 
         switch (choice) {
             case 0:
                 return "x";
             case 1:
                 return "y";
-            case 2:
-                return "t";
-            case 3: {
+            case 2: {
                 double value = -1.0 + 2.0 * rand.nextDouble();
                 return String.format("%.2f", value);
             }
-            case 4:
+            case 3:
             default:
                 return generateRandomColorLiteral();
         }

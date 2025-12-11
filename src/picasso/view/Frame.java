@@ -7,18 +7,13 @@ package picasso.view;
 		import java.awt.event.ActionListener;
 		import java.nio.file.Path;
 		import java.nio.file.Paths;
-
 		import javax.swing.JFrame;
 		import javax.swing.JLabel;
 		import javax.swing.JPanel;
 		import javax.swing.JTextField;
-
 		import picasso.model.Pixmap;
 		import picasso.util.ErrorReporter;
 		import picasso.util.ThreadedCommand;
-		import picasso.view.commands.Evaluator;
-		import picasso.view.commands.Reader;
-		import picasso.view.commands.Writer;
 		import picasso.view.commands.*;
 		/**
 		 * Main container for the Picasso application.
@@ -77,10 +72,10 @@ package picasso.view;
 
 				// add commands to test here
 				ButtonPanel commands = new ButtonPanel(canvas);
-				commands.add("Open", new Reader(canvas, expression, errorReporter, history)); // Updated to include errorReporter and history
+				commands.add("Open", new Reader(canvas, expression, errorReporter, history));
 				commands.add("Evaluate", new ThreadedCommand<Pixmap>(canvas, new Evaluator(expression, errorReporter, history)));
 				commands.add("Save", new Writer(expression));
-				commands.add("Generate Random Expression", new RandomExpressionLoader(canvas, expression, history));
+				commands.add("Generate Random Expression", new RandomExpressionLoader(canvas, expression, errorReporter, history));
 
 				// Add action listener so pressing Enter evaluates
 				expression.addActionListener(new ActionListener() {

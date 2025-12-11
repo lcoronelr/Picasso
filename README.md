@@ -37,46 +37,48 @@ This code base originated as a project in a course at Duke University.  The prof
 
 ### Iterate Fractals (Mandelbrot)
 The **Mandelbrot** extension lets you create the Mandelbrot fractals
-with a given x and y.
+with a given x and y
 
 **How to use:**
-1. Enter an expression with two parameters - ideally x and y coordinates.
+1. Enter an expression with two parameters - ideally x and y coordinates
 
    *Example 1:* `mandelbrot(x, y)` - generates classic Mandelbrot set
    
    *Example 2:* `mandelbrot(x+x, y+y)` - zooms out to display full fractal 	pattern by scaling coordinates
    
    *Example 3:* `mandelbrot(x*0.5, y*0.5)` - zooms into the fractal
-2. Click **Evaluate** or simply press **Enter**.
+2. Click **Evaluate** or simply press **Enter**
 3. The expression will generate detailed fractal patterns particularly
-at the boundaries.
+at the boundaries
 
 ### Animator
 
-The **Animator** extension lets you animate any mathematical expression that uses the variable `t`.
+The **Animator** extension lets you animate any mathematical expression that uses the variable `t`
 
 **How to use:**
-1. Enter an expression that includes `t` in the input field.  
+1. Enter an expression that includes `t` in the input field 
    *Example:* `sin(t) * x`
-2. Click **Evaluate** or simply press **Enter**.
-3. The expression will animate automatically for 50 frames, with `t` varying from `0` to `1`.
+2. Click **Evaluate** or simply press **Enter**
+3. The expression will animate automatically for 50 frames, with `t` varying from `0` to `1`
 
 ### Random Expressions
 
-The Random Expressions extension lets you automatically generate and display a random Picasso expression.
+The Random Expressions extension lets you automatically generate and display a random Picasso expression
 
 **How to use**:
 
-1. Click the **Generate Random Expression** button.
-2. A random expression will appear in the input field.
-3. The expression is evaluated and drawn automatically.  
-   You can edit the expression if you want and click **Evaluate** to see the updated image.
+1. Click the **Generate Random Expression** button
+2. A random expression will appear in the input field
+3. The expression is evaluated, drawn, and saved to history automatically
+4. You can edit the expression if you want and click **Evaluate** to see the updated image
+
+*Note: Random expressions omit animation due to complexity, but you can manually add `t` later if you want animation*
    
 ### History
-The *History* keeps tracks all of the exprresions that have been evaluated
+The **History** keeps tracks all of the exprresions that have been evaluated
 
-*How to use*
+**How to use**:
 
-1. just save the expression and you will see it pop up in the History bar on the side
-2. You can clear the saved expressions to reset the cache.
-3. you can select one of the past expressions and click use selected to show the expression
+1. Whenever you evaluate an expression or generate a random one, it will appear in the History panel on the side
+2. You can clear the saved expressions to reset the history
+3. To reuse a past expression, either double-click it or select it and click **Use Selected**
