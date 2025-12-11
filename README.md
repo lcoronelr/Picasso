@@ -52,9 +52,6 @@ with a given x and y.
 at the boundaries.
 
 ### Animator
-- Type an expression that includes t in the input field
-Click "Evaluate"
-- The expression will automatically animate, with t varying from 0 to 1
 
 The **Animator** extension lets you animate any mathematical expression that uses the variable `t`.
 
