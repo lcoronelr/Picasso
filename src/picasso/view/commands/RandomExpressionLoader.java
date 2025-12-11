@@ -70,7 +70,7 @@ public class RandomExpressionLoader extends FileCommand<Pixmap> {
             if (knownMultiArgByName.containsKey(f)) {
                 int arity = knownMultiArgByName.get(f);
                 multiArgFunctions.put(f, arity);
-            } else if ("random".equals(f) || "randomFunction".equals(f)) {  // FIX THIS
+            } else if ("random".equals(f) || "randomFunction".equals(f)) { 
                 zeroArgFunctions.add(f);
             } else {
                 unaryFunctions.add(f);
