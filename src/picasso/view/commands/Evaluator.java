@@ -1,6 +1,7 @@
 package picasso.view.commands;
 
 import java.awt.Color;
+
 import java.awt.Dimension;
 import javax.swing.JTextField;
 
@@ -123,7 +124,33 @@ public class Evaluator implements Command<Pixmap> {
 		
 		return msg;
 	}
-	
+	/**
+	 * Checks for misspellings and errors in capitalization
+	 */
+	private String suggestFunctionName(String expression) {
+		String[][] commonFunctions = {
+			{"perlinbw", "perlinBW"},
+			{"perlincolor", "perlinColor"},
+			{"imagewrap", "imageWrap"},
+			{"imageclip", "imageClip"},
+			{"rgbtoycc", "rgbToYCrCb"},
+			{"yccbtorgb", "yCrCbtoRGB"}
+		};
+		
+		String lowerExpr = expression.toLowerCase();
+		
+		for (String[] pair : commonFunctions) {
+			if (lowerExpr.contains(pair[0] + "(")) {
+				return "Unknown function '" + pair[0] + "'. Did you mean '" + pair[1] + "'?";
+			}
+		}
+		
+		if (expression.matches(".*\\b[a-zA-Z][a-zA-Z0-9]*\\s*\\(.*")) {
+			return "Unknown function name. Check spelling and capitalization.";
+		}
+		
+		return null;
+	}
 	/**
 	 * Helper method to report errors (handles null errorReporter gracefully)
 	 */
