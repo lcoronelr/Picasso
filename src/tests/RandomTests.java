@@ -2,11 +2,11 @@ package tests;
 
 import java.util.List;
 
-import org.junit.Test;
-import static org.junit.jupiter.api.Assertions.*;
+// JUnit 5 imports
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.RepeatedTest;
+import static org.junit.jupiter.api.Assertions.*;
 
 import picasso.parser.ExpressionTreeGenerator;
 import picasso.parser.Tokenizer;
@@ -36,7 +36,7 @@ public class RandomTests {
 		String expression = "random()";
 		List<Token> tokens = tokenizer.parseTokens(expression);
 		
-		assertEquals(4, tokens.size(), "Should have 4 tokens: random ( )");
+		assertEquals(3, tokens.size(), "Should have 3 tokens: random ()");
 		assertEquals(new RandomToken(), tokens.get(0));
 		assertEquals(new LeftParenToken(), tokens.get(1));
 		assertEquals(new RightParenToken(), tokens.get(2));
