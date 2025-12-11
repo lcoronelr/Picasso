@@ -5,7 +5,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-
 import picasso.parser.language.BuiltinFunctionsReader;
 import picasso.parser.language.ExpressionTreeNode;
 import picasso.parser.tokens.Token;
@@ -86,10 +85,6 @@ public class SemanticAnalyzer implements SemanticAnalyzerInterface {
         createFunctionParserMappings();
         createOperationMappings();
 
-        // TODO: Probably should put this information into a file
-        // that can be read in. Separates business rules/syntax from the code.
-        // OR, is there a better alternative?
-
         // add for constants
         String tokenName = TOKENS_PACKAGE_NAME + "NumberToken";
         String parserName = PARSER_PACKAGE + "ConstantAnalyzer";
@@ -114,9 +109,6 @@ public class SemanticAnalyzer implements SemanticAnalyzerInterface {
 			        "picasso.parser.tokens.operations.NegateToken",
 			        "picasso.parser.NegateAnalyzer"
 			    );
-
-        // TODO: Are there any others that should be added?
-        // Is there a better way to create this mapping?
     }
 
     /**
@@ -177,8 +169,6 @@ public class SemanticAnalyzer implements SemanticAnalyzerInterface {
      */
     private void createOperationMappings() {
 
-        // TODO: The following exceptions should probably be propagated up to
-        // the user.
         Properties opProps = new Properties();
         try {
             opProps.load(new FileReader(OPS_FILE));

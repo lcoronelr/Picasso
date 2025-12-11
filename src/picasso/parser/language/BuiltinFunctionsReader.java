@@ -40,8 +40,6 @@ public class BuiltinFunctionsReader {
 			reader = new Scanner(new File(FUNCTIONS_CONF_FILE));
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
-			// TODO: should pass the error up so that the user knows what the
-			// problem is.
 			return;
 		}
 		while (reader.hasNextLine()) {

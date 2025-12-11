@@ -52,9 +52,6 @@ public class TokenFactory {
 			    Token ct = CharTokenFactory.getToken(result);
 			    return ct;
 			}
-			
-			// TODO: Handle quoted strings
-			// Others?
 
 		} catch (IOException io) {
 			throw new ParseException("io problem " + io);

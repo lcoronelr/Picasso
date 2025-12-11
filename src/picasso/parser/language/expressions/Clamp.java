@@ -15,7 +15,6 @@ public class Clamp extends UnaryFunction {
 	
 	@Override
 	public RGBColor evaluate(double x, double y) {
-		// TODO Auto-generated method stub
 		RGBColor result = param.evaluate(x, y);
 		double red = Math.clamp(result.getRed(), -1, 1);
 		double green = Math.clamp(result.getGreen(), -1, 1);
