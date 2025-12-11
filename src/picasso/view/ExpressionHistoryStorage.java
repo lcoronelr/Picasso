@@ -25,7 +25,7 @@ public final class ExpressionHistoryStorage {
 	 *
 	 * @param file         path to the history file
 	 * @param history      the history model to populate
-	 * @param errorReporter optional error reporter for IO issues (may be null)
+	 * @param errorReporter error reporter for IO issues
 	 */
 	public static void load(Path file, ExpressionHistory history, ErrorReporter errorReporter) {
 		if (file == null || history == null) {
@@ -51,7 +51,7 @@ public final class ExpressionHistoryStorage {
 	 *
 	 * @param file         path to the history file
 	 * @param history      history to persist
-	 * @param errorReporter optional error reporter for IO issues (may be null)
+	 * @param errorReporter error reporter for IO issues
 	 */
 	public static void attachAutoSave(Path file, ExpressionHistory history, ErrorReporter errorReporter) {
 		if (file == null || history == null) {

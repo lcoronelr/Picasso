@@ -15,6 +15,7 @@ import picasso.model.Pixmap;
 import picasso.parser.language.BuiltinFunctionsReader;
 import picasso.util.FileCommand;
 import picasso.util.ErrorReporter;
+import picasso.view.ExpressionHistory;
 
 /**
  * Loads and evaluates a randomly generated Picasso expression.
@@ -27,8 +28,9 @@ public class RandomExpressionLoader extends FileCommand<Pixmap> {
     private final JTextField expressionField;
     private final Random rand = new Random();
     private ErrorReporter errorReporter;
+    private ExpressionHistory history;
 
-   
+
     private static final int MAX_DEPTH = 10;
 
     private static final List<String> BINARY_OPERATORS = List.of(
@@ -44,10 +46,11 @@ public class RandomExpressionLoader extends FileCommand<Pixmap> {
 
     private final List<String> imagePaths = new ArrayList<>();
 
-    public RandomExpressionLoader(JComponent view, JTextField expressionField) {
+    public RandomExpressionLoader(JComponent view, JTextField expressionField, ExpressionHistory history) {
         super(JFileChooser.OPEN_DIALOG);
         this.view = view;
         this.expressionField = expressionField;
+        this.history = history;
         initializeFunctions();
         initializeImageFiles();
     }
@@ -110,7 +113,7 @@ public class RandomExpressionLoader extends FileCommand<Pixmap> {
         String randomExpr = generateTopLevelExpression();
         expressionField.setText(randomExpr);
 
-        Evaluator evaluator = new Evaluator(expressionField, errorReporter, null);
+        Evaluator evaluator = new Evaluator(expressionField, errorReporter, history);
         evaluator.execute(target);
     }
 
@@ -170,6 +173,7 @@ public class RandomExpressionLoader extends FileCommand<Pixmap> {
      * Leaf expression:
      *  - x
      *  - y
+     *  - t
      *  - numeric constant in [-1,1]
      *  - random color literal [r,g,b]
      */

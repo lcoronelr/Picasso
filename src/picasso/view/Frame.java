@@ -80,7 +80,7 @@ package picasso.view;
 				commands.add("Open", new Reader(canvas, expression, errorReporter, history)); // Updated to include errorReporter and history
 				commands.add("Evaluate", new ThreadedCommand<Pixmap>(canvas, new Evaluator(expression, errorReporter, history)));
 				commands.add("Save", new Writer(expression));
-				commands.add("Generate Random Expression", new RandomExpressionLoader(canvas, expression ));
+				commands.add("Generate Random Expression", new RandomExpressionLoader(canvas, expression, history));
 
 				// Add action listener so pressing Enter evaluates
 				expression.addActionListener(new ActionListener() {
