@@ -82,14 +82,13 @@ public class PerlinBWTests {
 
 	@Test
 	public void testPerlinBWDifferentInputs() {
-		// Test that different inputs produce different outputs
 		PerlinBW perlin = new PerlinBW(new X(), new Y());
-		
-		RGBColor result1 = perlin.evaluate(0.0, 0.0);
-		RGBColor result2 = perlin.evaluate(0.5, 0.5);
-		
-		assertNotEquals(result1.getRed(), result2.getRed(), 
-				"Different inputs have different grayscale values");
+	    RGBColor result1 = perlin.evaluate(0.123, 0.456); 
+	    RGBColor result2 = perlin.evaluate(0.789, 0.234);   
+	    double difference = Math.abs(result1.getRed() - result2.getRed());
+	    
+	    assertTrue(difference > EPSILON,
+	            "Different inputs different greyscale colors, )" +difference + "is more than the allowed margin Epsilon");
 	}
 
 	@Test

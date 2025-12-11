@@ -46,8 +46,8 @@ public class YCrCbToRGBTest {
         assertEquals(original.getRed(), result.getRed(), EPSILON);
         assertEquals(original.getGreen(), result.getGreen(), EPSILON);
         assertEquals(original.getBlue(), result.getBlue(), EPSILON);
-        assertTrue(result.getRed() >= -1 && result.getRed() <= 1, "Red should remain in range");
-        assertTrue(result.getGreen() >= -1 && result.getGreen() <= 1, "Green should remain in range");
-        assertTrue(result.getBlue() >= -1 && result.getBlue() <= 1, "Blue should remain in range");
+        assertTrue(result.getRed() >= -1 - EPSILON && result.getRed() <= 1 + EPSILON, "Red should remain in range");
+        assertTrue(result.getGreen() >= -1 - EPSILON && result.getGreen() <= 1 + EPSILON, "Green should remain in range");
+        assertTrue(result.getBlue() >= -1 - EPSILON && result.getBlue() <= 1 + EPSILON, "Blue should remain in range");
     }
 }

@@ -6,15 +6,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
-
 import picasso.model.Pixmap;
 import picasso.parser.language.BuiltinFunctionsReader;
-import picasso.util.FileCommand;
 import picasso.util.ErrorReporter;
+import picasso.util.FileCommand;
+import picasso.view.ExpressionHistory;
 
 /**
  * Loads and evaluates a randomly generated Picasso expression.
@@ -26,9 +25,10 @@ public class RandomExpressionLoader extends FileCommand<Pixmap> {
     private final JComponent view;
     private final JTextField expressionField;
     private final Random rand = new Random();
-    private ErrorReporter errorReporter;
+    private final ErrorReporter errorReporter;
+    private final ExpressionHistory history;
 
-   
+
     private static final int MAX_DEPTH = 10;
 
     private static final List<String> BINARY_OPERATORS = List.of(
@@ -44,10 +44,12 @@ public class RandomExpressionLoader extends FileCommand<Pixmap> {
 
     private final List<String> imagePaths = new ArrayList<>();
 
-    public RandomExpressionLoader(JComponent view, JTextField expressionField) {
+    public RandomExpressionLoader(JComponent view, JTextField expressionField, ErrorReporter errorReporter, ExpressionHistory history) {
         super(JFileChooser.OPEN_DIALOG);
         this.view = view;
         this.expressionField = expressionField;
+        this.errorReporter = errorReporter;
+        this.history = history;
         initializeFunctions();
         initializeImageFiles();
     }
@@ -70,7 +72,7 @@ public class RandomExpressionLoader extends FileCommand<Pixmap> {
             if (knownMultiArgByName.containsKey(f)) {
                 int arity = knownMultiArgByName.get(f);
                 multiArgFunctions.put(f, arity);
-            } else if ("random".equals(f) || "randomFunction".equals(f)) { 
+            } else if ("random".equals(f)) { 
                 zeroArgFunctions.add(f);
             } else {
                 unaryFunctions.add(f);
@@ -110,7 +112,7 @@ public class RandomExpressionLoader extends FileCommand<Pixmap> {
         String randomExpr = generateTopLevelExpression();
         expressionField.setText(randomExpr);
 
-        Evaluator evaluator = new Evaluator(expressionField, errorReporter, null);
+        Evaluator evaluator = new Evaluator(expressionField, errorReporter, history);
         evaluator.execute(target);
     }
 

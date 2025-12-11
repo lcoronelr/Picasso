@@ -2,7 +2,7 @@ package picasso.parser.tokens.operations;
 
 import picasso.parser.language.CharConstants;
 import picasso.parser.tokens.chars.CharToken;
-//import picasso.parser.OperatorPrecedence;
+import picasso.parser.OperatorPrecedence;
 
 /**
  * Represents the modulo sign token
@@ -14,6 +14,6 @@ public class ModuloToken extends CharToken implements OperationInterface {
 
 	@Override
 	public int orderOfOperation(){
-		return 2;
+		return OperatorPrecedence.MULTIPLICATIVE;
 	}
 }

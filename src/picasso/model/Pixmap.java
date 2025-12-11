@@ -161,7 +161,6 @@ public class Pixmap {
 			if (width > mySize.width || height > mySize.height) {
 				myImage = copyImage(mySize, newSize, myImage);
 			} else {
-				// TODO: BUGBUG: scale image down instead?
 				myImage = myImage.getSubimage(0, 0, width, height);
 			}
 			mySize = newSize;
