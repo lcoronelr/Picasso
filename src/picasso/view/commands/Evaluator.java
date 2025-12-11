@@ -33,14 +33,6 @@ public class Evaluator implements Command<Pixmap> {
 	private ErrorReporter errorReporter;
 	
 	/** 
-	 * Constructor for the expression
-	 */	
-	public Evaluator(JTextField expressionField) {
-		this.expressionField = expressionField;
-		this.errorReporter = null;
-	}
-	
-	/** 
 	 * Constructor for the expression with error reporting
 	 */	
 	public Evaluator(JTextField expressionField, ErrorReporter errorReporter) {
@@ -52,13 +44,30 @@ public class Evaluator implements Command<Pixmap> {
 	 * Evaluate an expression for each point in the image.
 	 */
 	public void execute(Pixmap target) {
+		ExpressionTreeNode expr = null;
+		
 		try {
 			if (errorReporter != null) {
 				errorReporter.clearError();
 			}
 
-			ExpressionTreeNode expr = createExpression();
+			expr = createExpression();
 
+		} catch (ParseException e) {
+			String msg = e.getMessage();
+			if (msg != null && !msg.trim().isEmpty()) {
+				msg = cleanErrorMessage(msg);
+				reportError(msg);
+			} else {
+				reportError("Invalid expression syntax. Please check your input.");
+			}
+			
+			System.err.println(e.getMessage());
+			e.printStackTrace();
+			return;
+		}
+		
+		try {
 			int frames = 1;
 
 			if (T.getHasTime()) {
@@ -80,31 +89,18 @@ public class Evaluator implements Command<Pixmap> {
 
 				T.increaseTime();
 			}
-		} catch (ParseException e) {
-		    e.printStackTrace();
-		    String msg = e.getMessage();
-		    if (msg != null && !msg.trim().isEmpty()) {
-		        msg = cleanErrorMessage(msg);
-		        reportError(msg);
-		    } else {
-		        reportError("Invalid expression syntax. Please check your input.");
-		    }
 		} catch (ArithmeticException e) {
-		    e.printStackTrace();
-		    reportError("Math error: division by zero or invalid calculation.");
-		} catch (NullPointerException e) {
-		    e.printStackTrace();
-		    String expressionText = expressionField.getText();
-		    if (expressionText != null && !expressionText.trim().isEmpty()) {
-		        reportError("Invalid expression. The input contains characters that cannot be processed.");
-		    } else {
-		        reportError("Please enter an expression.");
-		    }
+			reportError("Math error: division by zero or invalid calculation.");
+			System.err.println("ArithmeticException during evaluation: " + e.getMessage());
+			e.printStackTrace();
+		} catch (NullPointerException | ClassCastException e) {
+			System.err.println("Programming error during evaluation:");
+			e.printStackTrace();
+			reportError("An internal error occurred. Please report this issue.");
 		} catch (Exception e) {
-		    System.err.println("Unexpected error during evaluation: " + e.getMessage());
-		    e.printStackTrace();
-		    reportError("Unable to evaluate expression. Please try a different one.");
-
+			System.err.println("Unexpected error during evaluation:");
+			e.printStackTrace();
+			reportError("Unable to evaluate expression. Please try a different one.");
 		} finally {
 			T.resetTime();
 			T.setHasTime(false);
@@ -134,8 +130,6 @@ public class Evaluator implements Command<Pixmap> {
 	private void reportError(String message) {
 		if (errorReporter != null) {
 			errorReporter.reportError(message);
-		} else {
-			System.err.println("Error: " + message);
 		}
 	}
 	
@@ -154,7 +148,7 @@ public class Evaluator implements Command<Pixmap> {
 	    String expressionText = expressionField.getText();
 	    
 	    if (expressionText == null || expressionText.trim().isEmpty()) {
-	        throw new NullPointerException("Empty expression");
+	        throw new ParseException("Empty expression");
 	    }
 	    
 	    return expTreeGen.makeExpression(expressionText);
