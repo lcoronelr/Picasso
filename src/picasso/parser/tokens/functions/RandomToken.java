@@ -6,9 +6,9 @@ package picasso.parser.tokens.functions;
  * @author Menilik Deneke
  */
 
-public class RandomFunctionToken extends FunctionToken {
+public class RandomToken extends FunctionToken {
 	
-	public RandomFunctionToken() {
+	public RandomToken() {
 		super("Random Function Token");
 	}
 

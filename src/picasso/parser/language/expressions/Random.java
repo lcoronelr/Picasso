@@ -2,15 +2,13 @@ package picasso.parser.language.expressions;
 
 import picasso.parser.language.ExpressionTreeNode;
 
-import java.util.Random;
-
-public class RandomFunction extends ExpressionTreeNode {
+public class Random extends ExpressionTreeNode {
 	private final double red;
 	private final double green;
 	private final double blue;
 	
-	public RandomFunction() {
-		Random random = new Random();
+	public Random() {
+		java.util.Random random = new java.util.Random();
 		this.red = random.nextDouble(2) - 1;
 		this.green = random.nextDouble(2) - 1;
 		this.blue = random.nextDouble(2) - 1;
