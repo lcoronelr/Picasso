@@ -12,11 +12,7 @@ import picasso.parser.tokens.Token;
 import picasso.parser.tokens.TokenFactory;
 
 /**
- * SemanticAnalyzer calls appropriate SemanticAnalyzer for the given token. 
- * It does so by creating mappings between each token and an analyzer. 
- * The unary functions (sin, cos, tan, etc) are mapped to the unaryFunctionAnalyzer, 
- * the binary operators (+, -, *, etc) are mapped to the binaryOperatorAnalyzer.
- * The rest of the tokens are mapped to the analyzer that matches their name.
+ * SemanticAnalyzer calls appropriate SemanticAnalyzer for the given token
  * 
  * @author Robert C. Duvall
  * @author Sara Sprenkle
@@ -36,7 +32,7 @@ public class SemanticAnalyzer implements SemanticAnalyzerInterface {
     private static final String TOKENS_PACKAGE_NAME = PARSER_PACKAGE + "tokens.";
     private static final String OPS_FILE = "conf/operations.prop";
     private static final List<String> NON_UNARY_FUNCTIONS = 
-                                    List.of("ImageClip", "ImageWrap", "PerlinBW", "PerlinColor", "Mandelbrot");
+                                    List.of("ImageClip", "ImageWrap", "PerlinBW", "PerlinColor", "RandomFunction");
 	
 
 

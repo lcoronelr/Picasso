@@ -10,7 +10,6 @@ import picasso.parser.tokens.*;
 import picasso.parser.tokens.chars.*;
 import picasso.parser.tokens.functions.*;
 import picasso.parser.tokens.operations.*;
-import picasso.parser.OperatorPrecedence;
 
 /**
  * Parses a string into an expression tree based on rules for arithmetic.
@@ -113,11 +112,10 @@ public class ExpressionTreeGenerator {
 				 * 
 				 * pop o2 off the stack, onto the output queue;
 				 */
-				while (!operators.isEmpty() 
-						&& !(operators.peek() instanceof LeftParenToken)
-						&& orderOfOperation(token) <= orderOfOperation(operators.peek())
-						&& !(orderOfOperation(operators.peek()) == OperatorPrecedence.EXPONENTIATION
-							&& orderOfOperation(token) == OperatorPrecedence.EXPONENTIATION)) {
+				while (!operators.isEmpty() && !(operators.peek() instanceof LeftParenToken)
+						&& ((OperationInterface) token).orderOfOperation() <= ((OperationInterface) operators.peek()).orderOfOperation()
+						&& !(((OperationInterface) operators.peek()).orderOfOperation() == 3
+							&& ((OperationInterface) token).orderOfOperation() == 3)) {
 					postfixResult.push(operators.pop());
 				}
 
@@ -183,9 +181,5 @@ public class ExpressionTreeGenerator {
 		// System.out.println(postfixResult);
 		return postfixResult;
 
-	}
-
-	private int orderOfOperation(Token token) {
-		return ((OperationInterface) token).orderOfOperation();
 	}
 }

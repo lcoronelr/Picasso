@@ -2,7 +2,6 @@ package picasso.parser.tokens.operations;
 
 import picasso.parser.language.CharConstants;
 import picasso.parser.tokens.chars.CharToken;
-import picasso.parser.OperatorPrecedence;
 
 /**
  * 
@@ -31,7 +30,7 @@ public class EqualToken extends CharToken implements OperationInterface {
 	 */
 	@Override
 	public int orderOfOperation(){
-		return OperatorPrecedence.ASSIGNMENT;
+		return 0;
 	}
 	
 }
