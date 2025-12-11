@@ -150,7 +150,7 @@ public class Evaluator implements Command<Pixmap> {
 	}
 	
 	/**
-	 * Helper method to report errors (handles null errorReporter gracefully)
+	 * Helper method to report errors
 	 */
 	private void reportError(String message) {
 		if (errorReporter != null) {

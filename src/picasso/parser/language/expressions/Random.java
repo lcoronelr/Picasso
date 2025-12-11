@@ -2,6 +2,12 @@ package picasso.parser.language.expressions;
 
 import picasso.parser.language.ExpressionTreeNode;
 
+/**
+ * Represents the Random function in the Picasso language
+ * 
+ * @author Menilik Deneke
+ */
+
 public class Random extends ExpressionTreeNode {
 	private final double red;
 	private final double green;

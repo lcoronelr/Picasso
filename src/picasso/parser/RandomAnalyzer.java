@@ -9,6 +9,12 @@ import picasso.parser.tokens.StringToken;
 import picasso.parser.tokens.Token;
 import picasso.parser.tokens.functions.RandomToken;
 
+/**
+ * Handles parsing the Random function
+ * 
+ * @author Menlik Deneke
+ */
+
 public class RandomAnalyzer implements SemanticAnalyzerInterface {
 
 	@Override
