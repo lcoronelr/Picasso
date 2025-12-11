@@ -90,7 +90,7 @@ public class ExpressionTreeGeneratorTests {
 		expected.push(new IdentifierToken("x"));
 		expected.push(new IdentifierToken("y"));
 		expected.push(new IdentifierToken("x"));
-		// expected.push(new MultiplyToken());
+		expected.push(new MultiplyToken());
 		expected.push(new PlusToken());
 
 		assertEquals(expected, stack);
@@ -104,5 +104,4 @@ public class ExpressionTreeGeneratorTests {
 		e = parser.makeExpression("floor( x + y )");
 		assertEquals(new Floor(new Plus(new X(), new Y())), e);
 	}
-
 }

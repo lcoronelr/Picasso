@@ -49,6 +49,7 @@ public class GUIErrorReporter implements ErrorReporter {
 			showErrorDialog(message);
 		}
 
+		System.err.println("GUI Error Reported: " + message);
 	}
 
 	@Override
