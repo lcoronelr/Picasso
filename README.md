@@ -35,6 +35,9 @@ This code base originated as a project in a course at Duke University.  The prof
 
 ## Extensions
 
+### Mandelbrot
+The iterate fractals extension is used by inputting `Mandelbrot(x, y)` into the GUI. To be able to view the Mandelbrot fractals in their entirety, ensure proper zoom and iteration settings.
+
 ### Animator
 The **Animator** extension lets you animate any mathematical expression that uses the variable `t`.
 
