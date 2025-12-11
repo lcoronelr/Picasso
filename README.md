@@ -35,8 +35,21 @@ This code base originated as a project in a course at Duke University.  The prof
 
 ## Extensions
 
-### Mandelbrot
-The iterate fractals extension is used by inputting `Mandelbrot(x, y)` into the GUI. To be able to view the Mandelbrot fractals in their entirety, ensure proper zoom and iteration settings.
+### Iterate Fractals (Mandelbrot)
+The **Mandelbrot** extension lets you create the Mandelbrot fractals
+with a given x and y.
+
+**How to use:**
+1. Enter an expression with two parameters - ideally x and y coordinates.
+
+   *Example 1:* `mandelbrot(x, y)` - generates classic Mandelbrot set
+   
+   *Example 2:* `mandelbrot(x+x, y+y)` - zooms out to display full fractal 	pattern by scaling coordinates
+   
+   *Example 3:* `mandelbrot(x*0.5, y*0.5)` - zooms into the fractal
+2. Click **Evaluate** or simply press **Enter**.
+3. The expression will generate detailed fractal patterns particularly
+at the boundaries.
 
 ### Animator
 - Type an expression that includes t in the input field
@@ -61,16 +74,3 @@ The Random Expressions extension lets you automatically generate and display a r
 2. A random expression will appear in the input field.
 3. The expression is evaluated and drawn automatically.  
    You can edit the expression if you want and click **Evaluate** to see the updated image.
-
-### Iterate Fractals
-The **Mandelbrot** extension lets you create the Mandelbrot fractals
-with a given x and y.
-
-**How to use:**
-1. Enter an expression with two parameters - ideally x and y coordinates.
-   *Example 1:* `mandelbrot(x, y)` - generates classic Mandelbrot set,
-   *Example 2:* `mandelbrot(x+x, y+y)` - creates a scaled version of fractals,
-   *Example 3:* `mandelbrot(x*0.5, y*0.5)` - zooms into the fractal
-2. Click **Evaluate** or simply press **Enter**.
-3. The expression will generate detailed fractal patterns particularly
-at the boundaries.
