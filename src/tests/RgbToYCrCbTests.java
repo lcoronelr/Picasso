@@ -32,6 +32,8 @@ import picasso.parser.tokens.functions.RgbToYCrCbToken;
  * @author Luis Coronel
  * @author Abhishek Pradhan
  * @author Asya Yurkovskaya
+ * @author Therese Elvira Mombou Gatsing
+ * 
  * 
  */
 
@@ -156,5 +158,59 @@ public class RgbToYCrCbTests {
 	    assertTrue(Ydark < Ymid, "Dark should have lower luminance than grey");
 	    assertTrue(Ymid < Ybright, "Grey should have lower luminance than white");
 	}
+	
+    @Test
+    public void testParserAndManualExpressionEvaluateSame() {
+        ExpressionTreeNode viaParser = parser.makeExpression("rgbToYCrCb(x)");
+        ExpressionTreeNode manual    = new RgbToYCrCb(new X());
+
+        double x = 0.3;
+        double y = -0.4;
+
+        RGBColor fromParser = viaParser.evaluate(x, y);
+        RGBColor fromManual = manual.evaluate(x, y);
+
+        assertEquals(fromManual.getRed(),   fromParser.getRed(),   EPSILON);
+        assertEquals(fromManual.getGreen(), fromParser.getGreen(), EPSILON);
+        assertEquals(fromManual.getBlue(),  fromParser.getBlue(),  EPSILON);
+    }
+    
+    @Test
+    public void testRgbToYCrCbIgnoresCoordinatesForConstantInput() {
+        ExpressionTreeNode constant = new RGBColor(0.3, -0.1, 0.8);
+        RgbToYCrCb converter = new RgbToYCrCb(constant);
+
+        RGBColor c1 = converter.evaluate(-1.0, 0.5);
+        RGBColor c2 = converter.evaluate(0.9, -0.7);
+
+        assertEquals(c1.getRed(),   c2.getRed(),   EPSILON);
+        assertEquals(c1.getGreen(), c2.getGreen(), EPSILON);
+        assertEquals(c1.getBlue(),  c2.getBlue(),  EPSILON);
+    }
+    
+    @Test
+    public void testRgbToYCrCbToString() {
+        RgbToYCrCb expr = new RgbToYCrCb(new X());
+        String s = expr.toString();
+
+        assertTrue(s.toLowerCase().contains("rgbtoycrcb"),
+                "toString should contain function name rgbToYCrCb");
+        assertTrue(s.contains("x"),
+                "toString should include the child expression");
+    }
+    
+    @Test
+    public void testTokenizeRgbToYCrCbWithWhitespace() {
+        String expression = "   rgbToYCrCb   (   x   )  ";
+        List<Token> tokens = tokenizer.parseTokens(expression);
+
+        assertFalse(tokens.isEmpty(), "Tokenizer should produce tokens");
+        assertEquals(new RgbToYCrCbToken(), tokens.get(0),
+                "First token should be RgbToYCrCbToken even with whitespace");
+        assertEquals(new IdentifierToken("x"), tokens.get(tokens.size() - 2),
+                "Identifier x should be recognized");
+    }
+    
+    
 
 }

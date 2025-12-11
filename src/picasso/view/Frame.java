@@ -56,6 +56,7 @@ public class Frame extends JFrame {
 		commands.add("Open", new Reader(canvas, expression)); // Updated to include errorReporter
 		commands.add("Evaluate", new ThreadedCommand<Pixmap>(canvas, new Evaluator(expression, errorReporter)));
 		commands.add("Save", new Writer(expression));
+		commands.add("GenerateRandomExpression", new RandomExpressionLoader(canvas, expression ));
 
 		
 		// Add action listener so pressing Enter evaluates

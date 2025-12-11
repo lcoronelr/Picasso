@@ -22,7 +22,7 @@ import picasso.util.ThreadedCommand;
 public class ExpressionFileLoader extends FileCommand<Pixmap> {
 	private final JComponent view;
     private final JTextField expressionField;
-	private final ErrorReporter errorReporter; // Added
+	private final ErrorReporter errorReporter; 
 
 	public ExpressionFileLoader(JComponent view, JTextField expressionField, ErrorReporter errorReporter) { // Updated
         super(JFileChooser.OPEN_DIALOG);
@@ -60,21 +60,14 @@ public class ExpressionFileLoader extends FileCommand<Pixmap> {
 			String expr = builder.toString();
 			expressionField.setText(expr);
 			if (!expr.isEmpty()) {
-				// Use error reporter if available
 				Evaluator evaluator;
-				if (errorReporter != null) {
-					evaluator = new Evaluator(expressionField, errorReporter);
-				} else {
-					evaluator = new Evaluator(expressionField);
-				}
+				evaluator = new Evaluator(expressionField, errorReporter);
 				new ThreadedCommand<Pixmap>(view, evaluator).execute(target);
 			}
         } catch (IOException e) {
-			// Report error if errorReporter is available
 			if (errorReporter != null) {
 				errorReporter.reportError("Error reading file: " + e.getMessage());
 			} else {
-				// keep UI silent on errors; log to console for debugging
 				e.printStackTrace();
 			}
         }

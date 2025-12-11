@@ -10,7 +10,6 @@ import picasso.parser.ParseException;
 import picasso.parser.language.ExpressionTreeNode;
 import picasso.util.Command;
 import picasso.util.ErrorReporter;
-import picasso.parser.language.expressions.T;
 
 /**
  * Evaluate an expression for each pixel in a image.
@@ -33,14 +32,6 @@ public class Evaluator implements Command<Pixmap> {
 	private ErrorReporter errorReporter;
 	
 	/** 
-	 * Constructor for the expression
-	 */	
-	public Evaluator(JTextField expressionField) {
-		this.expressionField = expressionField;
-		this.errorReporter = null;
-	}
-	
-	/** 
 	 * Constructor for the expression with error reporting
 	 */	
 	public Evaluator(JTextField expressionField, ErrorReporter errorReporter) {
@@ -52,62 +43,60 @@ public class Evaluator implements Command<Pixmap> {
 	 * Evaluate an expression for each point in the image.
 	 */
 	public void execute(Pixmap target) {
+		ExpressionTreeNode expr = null;
+		
 		try {
 			if (errorReporter != null) {
 				errorReporter.clearError();
 			}
 
-			ExpressionTreeNode expr = createExpression();
+			expr = createExpression();
 
-			int frames = 1;
-
-			if (T.getHasTime()) {
-				frames = 50;
-			}
-
-			Dimension size = target.getSize();
-
-			for (int i = 0; i < frames; i++) {
+		} catch (ParseException e) {
+			String msg = e.getMessage();
+			if (msg != null && !msg.trim().isEmpty()) {
+				msg = cleanErrorMessage(msg);
 				
-				for (int imageY = 0; imageY < size.height; imageY++) {
-					double evalY = imageToDomainScale(imageY, size.height);
-					for (int imageX = 0; imageX < size.width; imageX++) {
-						double evalX = imageToDomainScale(imageX, size.width);
-						Color pixelColor = expr.evaluate(evalX, evalY).toJavaColor();
-						target.setColor(imageX, imageY, pixelColor);
+				String expressionText = expressionField.getText();
+				if (expressionText != null && msg.contains("Extra operands")) {
+					String suggestion = suggestFunctionName(expressionText);
+					if (suggestion != null) {
+						msg = suggestion;
 					}
 				}
-
-				T.increaseTime();
+				
+				reportError(msg);
+			} else {
+				reportError("Invalid expression syntax. Please check your input.");
 			}
-		} catch (ParseException e) {
-		    e.printStackTrace();
-		    String msg = e.getMessage();
-		    if (msg != null && !msg.trim().isEmpty()) {
-		        msg = cleanErrorMessage(msg);
-		        reportError(msg);
-		    } else {
-		        reportError("Invalid expression syntax. Please check your input.");
-		    }
-		} catch (ArithmeticException e) {
-		    e.printStackTrace();
-		    reportError("Math error: division by zero or invalid calculation.");
-		} catch (NullPointerException e) {
-		    e.printStackTrace();
-		    String expressionText = expressionField.getText();
-		    if (expressionText != null && !expressionText.trim().isEmpty()) {
-		        reportError("Invalid expression. The input contains characters that cannot be processed.");
-		    } else {
-		        reportError("Please enter an expression.");
-		    }
-		} catch (Exception e) {
-		    System.err.println("Unexpected error during evaluation: " + e.getMessage());
-		    e.printStackTrace();
-		    reportError("Unable to evaluate expression. Please try a different one.");
+			System.err.println("ParseException occurred:");
+			e.printStackTrace();
+			return;
+		}
+		
+		try {
+			Dimension size = target.getSize();
 
-		} finally {
-			T.resetTime();
-			T.setHasTime(false);
+			for (int imageY = 0; imageY < size.height; imageY++) {
+				double evalY = imageToDomainScale(imageY, size.height);
+				for (int imageX = 0; imageX < size.width; imageX++) {
+					double evalX = imageToDomainScale(imageX, size.width);
+					Color pixelColor = expr.evaluate(evalX, evalY).toJavaColor();
+					target.setColor(imageX, imageY, pixelColor);
+				}
+			}
+		} catch (ArithmeticException e) {
+			reportError("Math error: division by zero or invalid calculation.");
+			System.err.println("ArithmeticException during evaluation:");
+			e.printStackTrace();
+		} catch (NullPointerException | ClassCastException e) {
+			System.err.println("Programming error during evaluation:");
+			e.printStackTrace();
+			reportError("An internal error occurred. Please report this issue.");
+		} catch (Exception e) {
+			System.err.println("Unexpected error during evaluation:");
+			e.printStackTrace();
+			reportError("Unable to evaluate expression. Please try a different one.");
 		}
 	}
 	
@@ -118,7 +107,11 @@ public class Evaluator implements Command<Pixmap> {
 		msg = msg.replaceAll("(?i)ParseException:\\s*", "");
 		msg = msg.replaceAll("java\\.lang\\.\\w+:\\s*", "");
 		msg = msg.replaceAll("line \\d+:\\d+\\s*", "");
+		
 		msg = msg.replace("at input", "with");
+		msg = msg.replace("extraneous input", "unexpected");
+		msg = msg.replace("mismatched input", "unexpected");
+		
 		msg = msg.trim();
 		
 		if (!msg.isEmpty()) {
@@ -129,13 +122,39 @@ public class Evaluator implements Command<Pixmap> {
 	}
 	
 	/**
+	 * Detects potential misspelled function names and suggests corrections
+	 */
+	private String suggestFunctionName(String expression) {
+		String[][] commonFunctions = {
+			{"perlinbw", "perlinBW"},
+			{"perlincolor", "perlinColor"},
+			{"imagewrap", "imageWrap"},
+			{"imageclip", "imageClip"},
+			{"rgbtoycc", "rgbToYCrCb"},
+			{"yccbtorgb", "yCrCbtoRGB"}
+		};
+		
+		String lowerExpr = expression.toLowerCase();
+		
+		for (String[] pair : commonFunctions) {
+			if (lowerExpr.contains(pair[0] + "(")) {
+				return "Unknown function '" + pair[0] + "'. Did you mean '" + pair[1] + "'?";
+			}
+		}
+		
+		if (expression.matches(".*\\b[a-zA-Z][a-zA-Z0-9]*\\s*\\(.*")) {
+			return "Unknown function name. Check spelling and capitalization.";
+		}
+		
+		return null;
+	}
+	
+	/**
 	 * Helper method to report errors (handles null errorReporter gracefully)
 	 */
 	private void reportError(String message) {
 		if (errorReporter != null) {
 			errorReporter.reportError(message);
-		} else {
-			System.err.println("Error: " + message);
 		}
 	}
 	
@@ -149,14 +168,15 @@ public class Evaluator implements Command<Pixmap> {
 	
 	/**
 	 * Create expression tree from text field.
+	 * @throws ParseException if the expression cannot be parsed
 	 */
-	private ExpressionTreeNode createExpression() {
-	    String expressionText = expressionField.getText();
-	    
-	    if (expressionText == null || expressionText.trim().isEmpty()) {
-	        throw new NullPointerException("Empty expression");
-	    }
-	    
-	    return expTreeGen.makeExpression(expressionText);
+	private ExpressionTreeNode createExpression() throws ParseException {
+		String expressionText = expressionField.getText();
+		
+		if (expressionText == null || expressionText.trim().isEmpty()) {
+			throw new ParseException("Please enter an expression.");
+		}
+		
+		return expTreeGen.makeExpression(expressionText);
 	}
 }

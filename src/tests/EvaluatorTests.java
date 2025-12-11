@@ -15,9 +15,11 @@ import picasso.parser.language.expressions.*;
  * Tests of the evaluation of expression trees
  * 
  * @author Sara Sprenkle
- * 
+ * @author Therese Elvira Mombou Gatsing
  */
 public class EvaluatorTests {
+
+	private static final double EPSILON = 1e-9;
 
 	/**
 	 * @throws java.lang.Exception
@@ -67,6 +69,193 @@ public class EvaluatorTests {
 		}
 	}
 
-	// TODO: More tests of evaluation
+	
+	@Test
+	public void testYEvaluation() {
+		Y yExpr = new Y();
+		for (int i = -1; i <= 1; i++) {
+			assertEquals(new RGBColor(i, i, i), yExpr.evaluate(0.5, i),
+					"Y expression should use the y-coordinate only");
+		}
+	}
+
+	@Test
+	public void testPlusEvaluation() {
+		ExpressionTreeNode expr = new Plus(new X(), new Y());
+
+		double x = 0.3;
+		double y = -0.4;
+		RGBColor result = expr.evaluate(x, y);
+
+		double expected = x + y;
+		assertEquals(expected, result.getRed(),   EPSILON);
+		assertEquals(expected, result.getGreen(), EPSILON);
+		assertEquals(expected, result.getBlue(),  EPSILON);
+	}
+
+	@Test
+	public void testMinusEvaluation() {
+		ExpressionTreeNode expr = new Minus(new X(), new Y());
+
+		double x = 0.7;
+		double y = -0.2;
+		RGBColor result = expr.evaluate(x, y);
+
+		double expected = x - y;
+		assertEquals(expected, result.getRed(),   EPSILON);
+		assertEquals(expected, result.getGreen(), EPSILON);
+		assertEquals(expected, result.getBlue(),  EPSILON);
+	}
+
+	@Test
+	public void testMultiplyEvaluation() {
+		ExpressionTreeNode expr = new Multiply(new X(), new Y());
+
+		double x = 0.5;
+		double y = 0.4;
+		RGBColor result = expr.evaluate(x, y);
+
+		double expected = x * y;
+		assertEquals(expected, result.getRed(),   EPSILON);
+		assertEquals(expected, result.getGreen(), EPSILON);
+		assertEquals(expected, result.getBlue(),  EPSILON);
+	}
+
+	@Test
+	public void testDivideEvaluation() {
+		ExpressionTreeNode expr = new Divide(new X(), new Y());
+
+		double x = 0.6;
+		double y = 0.2;
+		RGBColor result = expr.evaluate(x, y);
+
+		double expected = x / y;
+		assertEquals(expected, result.getRed(),   EPSILON);
+		assertEquals(expected, result.getGreen(), EPSILON);
+		assertEquals(expected, result.getBlue(),  EPSILON);
+	}
+
+	@Test
+	public void testModEvaluation() {
+		ExpressionTreeNode expr = new Modulo(new X(), new Y());
+
+		double x = 0.7;
+		double y = 0.3;
+		RGBColor result = expr.evaluate(x, y);
+
+		double expected = x % y;
+		assertEquals(expected, result.getRed(),   EPSILON);
+		assertEquals(expected, result.getGreen(), EPSILON);
+		assertEquals(expected, result.getBlue(),  EPSILON);
+	}
+
+	@Test
+	public void testExpEvaluation() {
+	    ExpressionTreeNode expr = new Exp(new X());
+
+	    double x = 0.5;
+	    double y = 0.0; 
+	    RGBColor result = expr.evaluate(x, y);
+
+	    double expected = Math.exp(x);
+	    assertEquals(expected, result.getRed(),   EPSILON);
+	    assertEquals(expected, result.getGreen(), EPSILON);
+	    assertEquals(expected, result.getBlue(),  EPSILON);
+	}
+	
+
+	@Test
+	public void testAbsEvaluation() {
+		ExpressionTreeNode expr = new Abs(new X());
+
+		double x = -0.8;
+		RGBColor result = expr.evaluate(x, 0.0);
+
+		double expected = Math.abs(x);
+		assertEquals(expected, result.getRed(),   EPSILON);
+		assertEquals(expected, result.getGreen(), EPSILON);
+		assertEquals(expected, result.getBlue(),  EPSILON);
+	}
+
+	@Test
+	public void testCeilEvaluation() {
+		ExpressionTreeNode expr = new Ceil(new X());
+
+		double x = 0.2;
+		RGBColor result = expr.evaluate(x, 0.0);
+
+		double expected = Math.ceil(x);
+		assertEquals(expected, result.getRed(),   EPSILON);
+		assertEquals(expected, result.getGreen(), EPSILON);
+		assertEquals(expected, result.getBlue(),  EPSILON);
+	}
+
+	@Test
+	public void testSinEvaluation() {
+		ExpressionTreeNode expr = new Sin(new X());
+
+		double x = 0.5;
+		RGBColor result = expr.evaluate(x, 0.0);
+
+		double expected = Math.sin(x);
+		assertEquals(expected, result.getRed(),   EPSILON);
+		assertEquals(expected, result.getGreen(), EPSILON);
+		assertEquals(expected, result.getBlue(),  EPSILON);
+	}
+
+	@Test
+	public void testCosEvaluation() {
+		ExpressionTreeNode expr = new Cos(new X());
+
+		double x = 0.5;
+		RGBColor result = expr.evaluate(x, 0.0);
+
+		double expected = Math.cos(x);
+		assertEquals(expected, result.getRed(),   EPSILON);
+		assertEquals(expected, result.getGreen(), EPSILON);
+		assertEquals(expected, result.getBlue(),  EPSILON);
+	}
+
+	@Test
+	public void testClampEvaluation() {
+		ExpressionTreeNode expr = new Clamp(new X());
+
+		double[] tests = { -2.0, -1.0, -0.5, 0.0, 0.5, 1.0, 2.0 };
+
+		for (double x : tests) {
+			RGBColor result = expr.evaluate(x, 0.0);
+			assertTrue(result.getRed()   >= -1.0 && result.getRed()   <= 1.0);
+			assertTrue(result.getGreen() >= -1.0 && result.getGreen() <= 1.0);
+			assertTrue(result.getBlue()  >= -1.0 && result.getBlue()  <= 1.0);
+		}
+	}
+
+	
+
+	@Test
+	public void testNegateEvaluation() {
+		ExpressionTreeNode expr = new Negate(new X());
+
+		double x = 0.4;
+		RGBColor result = expr.evaluate(x, 0.0);
+
+		double expected = -x; 
+		assertEquals(expected, result.getRed(),   EPSILON);
+		assertEquals(expected, result.getGreen(), EPSILON);
+		assertEquals(expected, result.getBlue(),  EPSILON);
+	}
+
+	@Test
+	public void testRgbToYCrCbOutputRangeForRandomColor() {
+	    RGBColor original = new RGBColor(0.2, -0.3, 0.4);
+	    ExpressionTreeNode color = original;
+	    RgbToYCrCb converter = new RgbToYCrCb(color);
+
+	    RGBColor result = converter.evaluate(0.0, 0.0);
+
+	    assertTrue(result.getRed()   >= -1.0 && result.getRed()   <= 1.0);
+	    assertTrue(result.getGreen() >= -1.0 && result.getGreen() <= 1.0);
+	    assertTrue(result.getBlue()  >= -1.0 && result.getBlue()  <= 1.0);
+	}
 
 }
