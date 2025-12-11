@@ -13,11 +13,13 @@ import picasso.parser.Tokenizer;
 import picasso.parser.tokens.*;
 import picasso.parser.tokens.chars.*;
 import picasso.parser.tokens.functions.*;
+import picasso.parser.tokens.operations.*;
 
 /**
  * Tests that the tokenizer tokens as expected.
  * 
  * @author Sara Sprenkle
+ * @author Therese Elvira Mombou Gatsing
  */
 public class TokenizerTest {
 
@@ -98,13 +100,75 @@ public class TokenizerTest {
 	public void testTokenizeCombinedFunctionExpression() {
 		String expression = "perlinColor(floor(x), y)";
 		tokens = tokenizer.parseTokens(expression);
-		// TODO: Check the tokens...
-
+		
+		assertEquals(new PerlinColorToken(), tokens.get(0));
+		assertEquals(new LeftParenToken(),    tokens.get(1));
+		assertEquals(new FloorToken(),        tokens.get(2));
+		assertEquals(new LeftParenToken(),    tokens.get(3));
+		assertEquals(new IdentifierToken("x"),tokens.get(4));
+		assertEquals(new RightParenToken(),   tokens.get(5));
+		assertEquals(new CommaToken(),        tokens.get(6));
+		assertEquals(new IdentifierToken("y"),tokens.get(7));
+		assertEquals(new RightParenToken(),   tokens.get(8));
+		assertEquals(9, tokens.size());
+		
 		expression = "sin(perlinColor(x, y))";
 		tokens = tokenizer.parseTokens(expression);
-		// TODO: Check the tokens...
+		
+		assertEquals(new SinToken(),          tokens.get(0));
+		assertEquals(new LeftParenToken(),    tokens.get(1));
+		assertEquals(new PerlinColorToken(),  tokens.get(2));
+		assertEquals(new LeftParenToken(),    tokens.get(3));
+		assertEquals(new IdentifierToken("x"),tokens.get(4));
+		assertEquals(new CommaToken(),        tokens.get(5));
+		assertEquals(new IdentifierToken("y"),tokens.get(6));
+		assertEquals(new RightParenToken(),   tokens.get(7));
+		assertEquals(new RightParenToken(),   tokens.get(8));
+		assertEquals(9, tokens.size());
+		
 	}
 
-	// TODO: Test arithmetic (rather than function-based) expressions ...
+	
+	
+	@Test
+	public void testTokenizeSimpleArithmeticExpression() {
+		String expression = "x + y";
+		tokens = tokenizer.parseTokens(expression);
+
+		assertEquals(new IdentifierToken("x"), tokens.get(0));
+		assertEquals(new PlusToken(),          tokens.get(1));
+		assertEquals(new IdentifierToken("y"), tokens.get(2));
+		assertEquals(3, tokens.size());
+	}
+
+	
+	@Test
+	public void testTokenizeMixedArithmeticExpression() {
+		String expression = "x + y * 3";
+		tokens = tokenizer.parseTokens(expression);
+
+		assertEquals(new IdentifierToken("x"), tokens.get(0));
+		assertEquals(new PlusToken(),          tokens.get(1));
+		assertEquals(new IdentifierToken("y"), tokens.get(2));
+		assertEquals(new MultiplyToken(),      tokens.get(3));
+		assertEquals(new NumberToken(3),       tokens.get(4));
+		assertEquals(5, tokens.size());
+	}
+
+	
+	@Test
+	public void testTokenizeParenthesizedArithmeticExpression() {
+		String expression = "(x - 1) / y";
+		tokens = tokenizer.parseTokens(expression);
+
+		assertEquals(new LeftParenToken(),     tokens.get(0));
+		assertEquals(new IdentifierToken("x"), tokens.get(1));
+		assertEquals(new MinusToken(),         tokens.get(2));
+		assertEquals(new NumberToken(1),       tokens.get(3));
+		assertEquals(new RightParenToken(),    tokens.get(4));
+		assertEquals(new DivideToken(),        tokens.get(5));
+		assertEquals(new IdentifierToken("y"), tokens.get(6));
+		assertEquals(7, tokens.size());
+	}
 
 }

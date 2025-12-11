@@ -27,6 +27,7 @@ import picasso.parser.tokens.functions.ImageClipToken;
  * Tests for the imageClip function.
  * 
  * @author Luis Coronel
+ * @author Therese Elvira Mombou Gatsing
  */
 public class ImageClipTests {
 
@@ -146,4 +147,61 @@ public class ImageClipTests {
 			}
 		}
 	}
+	
+	 @Test
+	    public void testImageClipClampingBeyondRangeMatchesEdges() {
+	        ImageClip img = new ImageClip("images/vortex.jpg", new X(), new Y());
+
+	        // Coordinates far outside [-1,1] should clamp to edges.
+	        RGBColor edgeTopRight   = img.evaluate(1.0, 1.0);
+	        RGBColor edgeBottomLeft = img.evaluate(-1.0, -1.0);
+
+	        RGBColor farTopRight    = img.evaluate(5.0, 5.0);
+	        RGBColor farBottomLeft  = img.evaluate(-10.0, -10.0);
+
+	        assertEquals(edgeTopRight.getRed(),   farTopRight.getRed(),   EPSILON);
+	        assertEquals(edgeTopRight.getGreen(), farTopRight.getGreen(), EPSILON);
+	        assertEquals(edgeTopRight.getBlue(),  farTopRight.getBlue(),  EPSILON);
+
+	        assertEquals(edgeBottomLeft.getRed(),   farBottomLeft.getRed(),   EPSILON);
+	        assertEquals(edgeBottomLeft.getGreen(), farBottomLeft.getGreen(), EPSILON);
+	        assertEquals(edgeBottomLeft.getBlue(),  farBottomLeft.getBlue(),  EPSILON);
+	    }
+	 
+	 
+
+	    @Test
+	    public void testImageClipEqualsDifferentFilenamesNotEqual() {
+	        ImageClip img1 = new ImageClip("images/vortex.jpg", new X(), new Y());
+	        ImageClip img2 = new ImageClip("images/thread.jpg", new X(), new Y());
+
+	        assertNotEquals(img1, img2, "ImageClips with different filenames should not be equal");
+	    }
+
+	    @Test
+	    public void testImageClipEqualsNullAndDifferentType() {
+	        ImageClip img = new ImageClip("images/vortex.jpg", new X(), new Y());
+
+	        assertNotEquals(img, null, "ImageClip should not be equal to null");
+	        assertNotEquals(img, "some string", "ImageClip should not be equal to a different type");
+	    }
+
+	    @Test
+	    public void testParseImageClipWithComplexCoordinates() {
+	        ExpressionTreeNode parsed =
+	                parser.makeExpression("imageClip(\"images/vortex.jpg\", x + 0.5, y * 0.5)");
+
+	        ExpressionTreeNode expected =
+	                parser.makeExpression("imageClip(\"images/vortex.jpg\", (x + 0.5), (y * 0.5))");
+
+	        ExpressionTreeNode different =
+	                parser.makeExpression("imageClip(\"images/vortex.jpg\", x + (0.5 * y), y)");
+
+	        assertEquals(expected, parsed,
+	                "Parser should treat implicit and explicit parentheses the same for coordinates");
+	        assertNotEquals(different, parsed,
+	                "Different coordinate expressions should produce different trees");
+	    }
+	 
+	 
 }

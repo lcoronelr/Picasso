@@ -108,4 +108,53 @@ public class NegateTests {
 		boolean foundNegate = tokens.stream().anyMatch(t -> t instanceof NegateToken);
 		assertTrue(foundNegate, "Expression 'x + !x' should contain at least one NegateToken");
 	}
+	
+	@Test
+    public void testNegateOfFloorEvaluation() {
+        ExpressionTreeNode inner = new Floor(new X());   // floor(x)
+        Negate neg = new Negate(inner);                  // -floor(x)
+
+        double[] tests = { -0.9, -0.2, 0.0, 0.3, 0.9 };
+
+        for (double xVal : tests) {
+            RGBColor result = neg.evaluate(xVal, 0.0);
+            double expected = -Math.floor(xVal);
+
+            assertEquals(expected, result.getRed(),   EPSILON);
+            assertEquals(expected, result.getGreen(), EPSILON);
+            assertEquals(expected, result.getBlue(),  EPSILON);
+        }
+    }
+
+    
+    @Test
+    public void testParserNegateWithAndWithoutParentheses() {
+        ExpressionTreeNode withoutParens = parser.makeExpression("!x");
+        ExpressionTreeNode withParens    = parser.makeExpression("!(x)");
+
+        assertEquals(withoutParens, withParens,
+                "Parser should treat !x and !(x) as the same expression");
+    }
+
+   
+    @Test
+    public void testParserNegateOfFunction() {
+        ExpressionTreeNode parsed   = parser.makeExpression("!floor(x)");
+        ExpressionTreeNode expected = new Negate(new Floor(new X()));
+
+        assertEquals(expected, parsed,
+                "Parser should create Negate(Floor(X)) for '!floor(x)'");
+    }
+
+    
+    @Test
+    public void testTokenizeNegateWithWhitespace() {
+        String expression = "   !   x   ";
+        List<Token> tokens = tokenizer.parseTokens(expression);
+
+        assertEquals(2, tokens.size());
+        assertEquals(new NegateToken(),       tokens.get(0));
+        assertEquals(new IdentifierToken("x"),tokens.get(1));
+    }
+
 }

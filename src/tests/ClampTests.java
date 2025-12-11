@@ -31,6 +31,7 @@ import picasso.parser.tokens.functions.ClampToken;
  * Tests for the Clamp function
  * 
  * @author Menilik Deneke
+ * @author Therese Elvira Mombou Gatsing
  */
 class ClampTests {
 
@@ -126,5 +127,92 @@ class ClampTests {
 		assertEquals(new IdentifierToken("x"), tokens.get(2));
 		assertEquals(new RightParenToken(), tokens.get(3));
 	}
+	
+	
+	@Test
+    public void testClampMatchesChildWithinRange() {
+        Clamp clamp = new Clamp(new X());
+        X child = new X();
+
+        double[] tests = { -1.0, -0.5, 0.0, 0.5, 0.9, 1.0 };
+
+        for (double xVal : tests) {
+            RGBColor clamped = clamp.evaluate(xVal, 0.0);
+            RGBColor direct  = child.evaluate(xVal, 0.0);
+
+            assertEquals(direct, clamped,
+                    "Clamp(x) should not change values already in [-1,1]");
+        }
+    }
+
+    
+    @Test
+    public void testClampConstantColorIgnoresCoordinates() {
+        ExpressionTreeNode constant = new RGBColor(0.3, -0.4, 0.8);
+        Clamp clamp = new Clamp(constant);
+
+        RGBColor c1 = clamp.evaluate(-1.0, 0.5);
+        RGBColor c2 = clamp.evaluate(0.9, -0.7);
+
+        assertEquals(c1, c2, "Clamp of a constant color should be coordinate-independent");
+    }
+
+   
+    @Test
+    public void testParserNestedClampExpression() {
+        ExpressionTreeNode parsed   = parser.makeExpression("clamp(clamp(x))");
+        ExpressionTreeNode expected = new Clamp(new Clamp(new X()));
+
+        assertEquals(expected, parsed,
+                "Parser should create nested Clamp(Clamp(X)) for 'clamp(clamp(x))'");
+    }
+
+    
+    @Test
+    public void testParserClampWithComplexInnerExpression() {
+        ExpressionTreeNode parsed   = parser.makeExpression("clamp(x + y)");
+        ExpressionTreeNode expected = new Clamp(new Plus(new X(), new Y()));
+
+        // Structural equality
+        assertEquals(expected, parsed);
+
+        double x = 0.3;
+        double y = -0.2;
+        RGBColor parsedVal   = parsed.evaluate(x, y);
+        RGBColor expectedVal = expected.evaluate(x, y);
+
+        assertEquals(expectedVal, parsedVal,
+                "Parsed Clamp(x + y) should evaluate the same as manually built tree");
+    }
+
+   
+    @Test
+    public void testClampEqualsNullAndDifferentType() {
+        ExpressionTreeNode clamp = new Clamp(new X());
+
+        assertNotEquals(clamp, null, "Clamp expression should not equal null");
+        assertNotEquals(clamp, "clamp(x)",
+                "Clamp expression should not equal an arbitrary non-expression object");
+    }
+
+    
+    @Test
+    public void testTokenizeClampWithWhitespaceAndExpression() {
+        String expression = "   clamp   (   x + y   )  ";
+        List<Token> tokens = tokenizer.parseTokens(expression);
+
+        assertFalse(tokens.isEmpty(), "Tokenizer should produce tokens for clamp expression");
+        assertEquals(new ClampToken(),    tokens.get(0), "First token should be ClampToken");
+        assertEquals(new LeftParenToken(),tokens.get(1), "Second token should be '('");
+
+        // There should be an x and a y identifier somewhere in the middle
+        assertTrue(tokens.stream().anyMatch(t -> t.equals(new IdentifierToken("x"))),
+                "Tokens should contain identifier 'x'");
+        assertTrue(tokens.stream().anyMatch(t -> t.equals(new IdentifierToken("y"))),
+                "Tokens should contain identifier 'y'");
+
+        assertEquals(new RightParenToken(), tokens.get(tokens.size() - 1),
+                "Last token should be ')'");
+    }
 
 }

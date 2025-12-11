@@ -11,10 +11,15 @@ import picasso.parser.tokens.Token;
  * 
  * @author Therese Elvira Mombou Gatsing
  */
-public class EqualAnalyzer implements SemanticAnalyzerInterface {
+public class EqualAnalyzer implements SemanticAnalyzerInterface { 
 
+	/**
+	 *  Handles assignment expressions of the form "name = expression".
+	 *
+	 * @return the expression tree for the right-hand side
+	 */
     @Override
-    public ExpressionTreeNode generateExpressionTree(Stack<Token> tokens) {
+    public ExpressionTreeNode generateExpressionTree(Stack<Token> tokens) { 
         // Remove the "=" token from the stack
         tokens.pop();
 
@@ -29,6 +34,10 @@ public class EqualAnalyzer implements SemanticAnalyzerInterface {
 
         IdentifierToken idToken = (IdentifierToken) leftToken;
         String variableName = idToken.getName();
+        
+        if ("x".equals(variableName) || "y".equals(variableName)) {
+            throw new ParseException("Cannot assign to built-in variable '" + variableName + "'.");
+        }
 
         SemanticAnalyzer sem = SemanticAnalyzer.getInstance();
         sem.defineVariable(variableName, rhs);
