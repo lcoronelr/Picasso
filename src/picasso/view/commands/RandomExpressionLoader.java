@@ -69,7 +69,7 @@ public class RandomExpressionLoader extends FileCommand<Pixmap> {
             if (knownMultiArgByName.containsKey(f)) {
                 int arity = knownMultiArgByName.get(f);
                 multiArgFunctions.put(f, arity);
-            } else if ("randomFunction".equals(f)) {
+            } else if ("random".equals(f)) {
                 zeroArgFunctions.add(f);
             } else {
                 unaryFunctions.add(f);
@@ -140,7 +140,7 @@ public class RandomExpressionLoader extends FileCommand<Pixmap> {
      */
     private String generateRandomExpression(int depth) {
         if (depth <= 0) {
-            // At depth 0, sometimes generates randomFunction().
+            // At depth 0, sometimes generates random().
             if (!zeroArgFunctions.isEmpty() && rand.nextInt(5) == 0) {
                 return generateZeroArgFunction();
             }
