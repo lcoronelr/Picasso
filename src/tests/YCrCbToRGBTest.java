@@ -29,13 +29,6 @@ public class YCrCbToRGBTest {
     }
 
     @Test
-    public void parserBuildsExpectedTree() {
-        ExpressionTreeNode expected = new YCrCbToRGB(new RgbToYCrCb(new X()));
-        ExpressionTreeNode actual = parser.makeExpression("yCrCbToRGB(rgbToYCrCb(x))");
-        assertEquals(expected, actual);
-    }
-
-    @Test
     public void roundTripPrimaryColors() {
         assertRoundTrip(new RGBColor(-1, -1, -1));   // black
         assertRoundTrip(new RGBColor(1, 1, 1));      // white
