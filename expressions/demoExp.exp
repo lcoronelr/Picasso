@@ -1,1 +1,0 @@
-imageClip("images/foo.jpg", x, y) * tan(y)

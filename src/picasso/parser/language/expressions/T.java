@@ -15,7 +15,7 @@ public class T extends ExpressionTreeNode {
     private static boolean hasTime = false;
 
 	/**
-	 * //FIXME
+	 * Returns the color represented by t. The value of x and y do not matter.
 	 */
 	@Override
 	public RGBColor evaluate(double x, double y) {
