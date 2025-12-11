@@ -63,6 +63,8 @@ public class Reader extends FileCommand<Pixmap> {
 				// Use error reporter if available, otherwise use the basic Evaluator
 				if (errorReporter != null) {
 					new ThreadedCommand<Pixmap>(view, new Evaluator(expressionField, errorReporter)).execute(target);
+				} else {
+					new ThreadedCommand<Pixmap>(view, new Evaluator(expressionField)).execute(target);
 				}
 			}
 		} catch (IOException e) {

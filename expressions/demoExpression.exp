@@ -1,0 +1,1 @@
+rgbToYCrCb(imageClip("images/vortex.jpg", exp(x^y), x*y))
