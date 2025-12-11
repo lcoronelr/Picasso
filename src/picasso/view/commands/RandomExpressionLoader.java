@@ -110,7 +110,7 @@ public class RandomExpressionLoader extends FileCommand<Pixmap> {
         String randomExpr = generateTopLevelExpression();
         expressionField.setText(randomExpr);
 
-        Evaluator evaluator = new Evaluator(expressionField, errorReporter);
+        Evaluator evaluator = new Evaluator(expressionField, errorReporter, null);
         evaluator.execute(target);
     }
 

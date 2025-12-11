@@ -74,3 +74,12 @@ The Random Expressions extension lets you automatically generate and display a r
 2. A random expression will appear in the input field.
 3. The expression is evaluated and drawn automatically.  
    You can edit the expression if you want and click **Evaluate** to see the updated image.
+   
+### History
+The *History* keeps tracks all of the exprresions that have been evaluated
+
+*How to use*
+
+1. just save the expression and you will see it pop up in the History bar on the side
+2. You can clear the saved expressions to reset the cache.
+3. you can select one of the past expressions and click use selected to show the expression

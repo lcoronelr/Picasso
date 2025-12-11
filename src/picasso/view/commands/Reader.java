@@ -13,10 +13,13 @@ import picasso.model.Pixmap;
 import picasso.util.ErrorReporter;
 import picasso.util.FileCommand;
 import picasso.util.ThreadedCommand;
+import picasso.view.ExpressionHistory;
 
 /**
  * Opens either an image or expression file. Images are read into the pixmap;
- * expression files populate the input field and are evaluated. 
+ * expression files populate the input field and trigger evaluation for each
+ * non-blank, non-comment line in the file. Inline comments after // are
+ * removed before evaluation.
  * 
  * @author Robert C Duvall
  */
@@ -24,21 +27,24 @@ public class Reader extends FileCommand<Pixmap> {
 
 	private final JComponent view;
 	private final JTextField expressionField;
-	private final ErrorReporter errorReporter; // Added field
+	private final ErrorReporter errorReporter;
+	private final ExpressionHistory history;
 
-	/**
-	 * Creates a Reader object, which prompts users for image or expression files to open.
-	 */
-	public Reader(JComponent view, JTextField expressionField, ErrorReporter errorReporter) { // Updated constructor
+	public Reader(JComponent view, JTextField expressionField, ErrorReporter errorReporter, ExpressionHistory history) {
 		super(JFileChooser.OPEN_DIALOG);
 		this.view = view;
 		this.expressionField = expressionField;
 		this.errorReporter = errorReporter;
+		this.history = history;
 	}
-	
-	// Keep backward compatibility constructor for tests
+
+	// Backward compatibility constructors
+	public Reader(JComponent view, JTextField expressionField, ErrorReporter errorReporter) {
+		this(view, expressionField, errorReporter, null);
+	}
+
 	public Reader(JComponent view, JTextField expressionField) {
-		this(view, expressionField, null);
+		this(view, expressionField, null, null);
 	}
 
 	/**
@@ -57,20 +63,23 @@ public class Reader extends FileCommand<Pixmap> {
 		}
 
 		try {
-			String expr = readExpression(fileName);
-			expressionField.setText(expr);
-			if (!expr.isEmpty()) {
-				// Use error reporter if available, otherwise use the basic Evaluator
-				if (errorReporter != null) {
-					new ThreadedCommand<Pixmap>(view, new Evaluator(expressionField, errorReporter)).execute(target);
+			List<String> lines = Files.readAllLines(Paths.get(fileName));
+		for (String line : lines) {
+				String expr = stripInlineComment(line).trim();
+				if (expr.isEmpty()) {
+					continue; // skip blank or comment-only lines
 				}
+				expressionField.setText(expr);
+				Evaluator evaluator = (errorReporter != null)
+						? new Evaluator(expressionField, errorReporter, history)
+						: new Evaluator(expressionField, null, history);
+				new ThreadedCommand<Pixmap>(view, evaluator).execute(target);
 			}
+
 		} catch (IOException e) {
-			// Report error if errorReporter is available
 			if (errorReporter != null) {
 				errorReporter.reportError("Error reading file: " + e.getMessage());
 			} else {
-				// keep UI silent on errors; log to console for debugging
 				e.printStackTrace();
 			}
 		}
@@ -82,21 +91,11 @@ public class Reader extends FileCommand<Pixmap> {
 				|| lower.endsWith(".bmp");
 	}
 
-	private String readExpression(String fileName) throws IOException {
-		List<String> lines = Files.readAllLines(Paths.get(fileName));
-		StringBuilder builder = new StringBuilder();
-		for (String line : lines) {
-			int commentStart = line.indexOf("//");
-			String withoutComment = commentStart >= 0 ? line.substring(0, commentStart) : line;
-			String trimmed = withoutComment.trim();
-			if (trimmed.isEmpty()) {
-				continue;
-			}
-			if (builder.length() > 0) {
-				builder.append('\n');
-			}
-			builder.append(trimmed);
+	private String stripInlineComment(String line) {
+		if (line == null) {
+			return "";
 		}
-		return builder.toString();
+		int commentStart = line.indexOf("//");
+		return (commentStart >= 0) ? line.substring(0, commentStart) : line;
 	}
 }
